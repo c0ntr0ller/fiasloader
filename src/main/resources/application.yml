@@ -1,0 +1,19 @@
+#config:
+#  crontime: 0 * * * * ?
+#
+#mail: bek@prog-matik.ru
+
+#spring:
+#    jpa:
+#        hibernate:
+#            ddl-auto: create
+#        properties:
+#                jdbc:
+#                    batch_size:1000
+#    datasource:
+#        driver: org.postgresql.Driver
+#        url:  jdbc:postgresql:gistimer?stringtype=unspecified
+#        username: postgres
+#        password: 222
+
+fiasurl: http://fias.nalog.ru/WebServices/Public/DownloadService.asmx

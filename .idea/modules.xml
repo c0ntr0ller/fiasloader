@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fiasloader.iml" filepath="$PROJECT_DIR$/.idea/modules/fiasloader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fiasloader_main.iml" filepath="$PROJECT_DIR$/.idea/modules/fiasloader_main.iml" group="fiasloader" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fiasloader_test.iml" filepath="$PROJECT_DIR$/.idea/modules/fiasloader_test.iml" group="fiasloader" />
+    </modules>
+  </component>
+</project>
