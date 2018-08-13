@@ -1,7 +1,6 @@
 package ru.progmatik.main;
 
 import fias.wsdl.DownloadFileInfo;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,10 +25,10 @@ public class FilesListSheduler {
     @Autowired
     private FiasClient fiasClient;
 
-    @Value("${archDir}")
+    @Value("${archDir:}")
     String archDir;
 
-    @Value("${workDir}")
+    @Value("${workDir:}")
     String workDir;
 
     private List<DownloadFileInfo> fiasFilesList = new ArrayList<>();
@@ -63,11 +60,19 @@ public class FilesListSheduler {
         for (Integer versionId : filesMapForDownload.keySet().stream().sorted().collect(Collectors.toList())) {
             String url = filesMapForDownload.get(versionId);
 
-            String filename = versionId.toString() + ".rar";
+            File tmpDir = new File(System.getProperty("user.dir") + File.separatorChar + "tmp");
+            if(!tmpDir.exists()){
+                tmpDir.mkdir();
+            }
 
+            String tmpfilename =  System.getProperty("user.dir") + File.separatorChar + "tmp" + File.separatorChar + versionId.toString() + ".rar";
 
             try {
-                UtilClass.downLoadFileFromURL(filename, url);
+                UtilClass.downLoadFileFromURL(tmpfilename, url);
+                File tmpFile = new File(tmpfilename);
+                if(tmpFile.exists()) {
+                    tmpFile.renameTo(new File(workDir + File.separatorChar + tmpFile.getName()));
+                }
             } catch (IOException e) {
                 log.error("Exception while downloading file " + url);
                 e.printStackTrace();
@@ -92,13 +97,14 @@ public class FilesListSheduler {
 
         // получаем список файлов в архивной папке
         if(archDir == null || archDir.isEmpty()) {
-            archDir = System.getProperty("user.dir") + File.pathSeparator + "archive";
+            archDir = System.getProperty("user.dir") + File.separatorChar + "archive";
         }
+
         archFilesMap = getDirFiles(archDir);
 
         // получаем список файлов в папке для обработки (возможно какие-то еще не обработались либо скачаны частично)
         if(workDir == null || workDir.isEmpty()) {
-            workDir = System.getProperty("user.dir") + File.pathSeparator + "work";
+            workDir = System.getProperty("user.dir") + File.separatorChar + "work";
         }
         workFilesMap = getDirFiles(workDir);
 
@@ -139,6 +145,10 @@ public class FilesListSheduler {
     private Map<Integer,File> getDirFiles(String dir){
         File root= new File(dir);
 
+        if(!root.exists()){
+            root.mkdir();
+        }
+
         Map<Integer,File> fileMap = new HashMap<>();
 
         File[] files = root.listFiles();
@@ -150,6 +160,8 @@ public class FilesListSheduler {
             if(!file.isDirectory()
                     && FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("rar")){
                 String filename = FilenameUtils.getName(file.getName());
+                if (filename.indexOf(".") > 0)
+                    filename = filename.substring(0, filename.lastIndexOf("."));
                 if(UtilClass.isInteger(filename)) {
                     fileMap.put(Integer.parseInt(filename), file);
                 }
