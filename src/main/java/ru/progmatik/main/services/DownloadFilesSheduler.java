@@ -1,13 +1,14 @@
-package ru.progmatik.main;
+package ru.progmatik.main.services;
 
 import fias.wsdl.DownloadFileInfo;
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import ru.progmatik.main.webclient.FiasClient;
+import ru.progmatik.main.UtilClass;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,9 +19,9 @@ import java.util.stream.Collectors;
  * класс работает по расписанию, скачивает список файлов ФИАС, сравнивает с имеющимися в архиве,
  * решает какие надо скачать и скачивает их
  */
-@Component
-public class FilesListSheduler {
-    private static Logger log = LoggerFactory.getLogger(FilesListSheduler.class);
+@Service
+public class DownloadFilesSheduler {
+    private static Logger log = LoggerFactory.getLogger(DownloadFilesSheduler.class);
 
     @Autowired
     private FiasClient fiasClient;
@@ -35,24 +36,24 @@ public class FilesListSheduler {
     private Map<Integer,File> archFilesMap = new HashMap<>();
     private Map<Integer,File> workFilesMap = new HashMap<>();
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 10000000) // * 10 * 60 * 1000) // every 10 minutes
     public void checkAndGetFiasFiles(){
-
-        if (fiasFilesList != null){
-            fiasFilesList.clear();
-        }
-
-        fiasFilesList = fiasClient.getAllDownloadFileList();
-
-        if(fiasFilesList == null || fiasFilesList.isEmpty()){
-            log.error("Empty fias files list!");
-            return;
-        }
-
-        Map<Integer,String> filesMapForDownload = getFileMapForDownload();
-
-        // если список на скачивание непустой - запускаем скачивание
-        downloadFiles(filesMapForDownload);
+//
+//        if (fiasFilesList != null){
+//            fiasFilesList.clear();
+//        }
+//
+//        fiasFilesList = fiasClient.getAllDownloadFileList();
+//
+//        if(fiasFilesList == null || fiasFilesList.isEmpty()){
+//            log.error("Empty fias files list!");
+//            return;
+//        }
+//
+//        Map<Integer,String> filesMapForDownload = getFileMapForDownload();
+//
+//        // если список на скачивание непустой - запускаем скачивание
+//        downloadFiles(filesMapForDownload);
     }
 
     private void downloadFiles(Map<Integer, String> filesMapForDownload) {
@@ -100,13 +101,13 @@ public class FilesListSheduler {
             archDir = System.getProperty("user.dir") + File.separatorChar + "archive";
         }
 
-        archFilesMap = getDirFiles(archDir);
+        archFilesMap = UtilClass.getDirFiles(archDir, "rar");
 
         // получаем список файлов в папке для обработки (возможно какие-то еще не обработались либо скачаны частично)
         if(workDir == null || workDir.isEmpty()) {
             workDir = System.getProperty("user.dir") + File.separatorChar + "work";
         }
-        workFilesMap = getDirFiles(workDir);
+        workFilesMap = UtilClass.getDirFiles(workDir, "rar");
 
         // определяем какие файлы надо скачать
 
@@ -134,42 +135,5 @@ public class FilesListSheduler {
         }
         return fileMapForDownload;
     }
-
-
-    /**
-     * метод берет файлы из указанной директории
-     * в данном проекте берутся только файлы с расширением rar и с именем из цифр (номер версии файла)
-     * @param dir папка для получения списка файлов ФИАС
-     * @return
-     */
-    private Map<Integer,File> getDirFiles(String dir){
-        File root= new File(dir);
-
-        if(!root.exists()){
-            root.mkdir();
-        }
-
-        Map<Integer,File> fileMap = new HashMap<>();
-
-        File[] files = root.listFiles();
-        if (files == null){
-            return fileMap;
-        }
-
-        for (File file : files) {
-            if(!file.isDirectory()
-                    && FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("rar")){
-                String filename = FilenameUtils.getName(file.getName());
-                if (filename.indexOf(".") > 0)
-                    filename = filename.substring(0, filename.lastIndexOf("."));
-                if(UtilClass.isInteger(filename)) {
-                    fileMap.put(Integer.parseInt(filename), file);
-                }
-            }
-        }
-
-        return fileMap;
-    }
-
 
 }

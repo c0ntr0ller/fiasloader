@@ -1,9 +1,10 @@
-package ru.progmatik.main;
+package ru.progmatik.main.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import ru.progmatik.main.webclient.FiasClient;
 
 @Configuration
 public class FiasConfiguration {

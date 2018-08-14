@@ -1,4 +1,4 @@
-package ru.progmatik.main;
+package ru.progmatik.main.webclient;
 
 import fias.wsdl.DownloadFileInfo;
 import fias.wsdl.GetAllDownloadFileInfo;

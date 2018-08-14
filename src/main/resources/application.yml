@@ -16,4 +16,11 @@
 #        username: postgres
 #        password: 222
 
+driver: org.firebirdsql.jdbc.FBDriver
+databaseurl: 172.16.0.18:/opt/firebird/bases/FIAS.fdb
+username: SYSDBA
+password: 111
+encoding: WIN1251
+
 fiasurl: http://fias.nalog.ru/WebServices/Public/DownloadService.asmx
+batch_size: 1000
