@@ -23,4 +23,4 @@ password: 111
 encoding: WIN1251
 
 fiasurl: http://fias.nalog.ru/WebServices/Public/DownloadService.asmx
-batch_size: 1000
+batch_size: 10000

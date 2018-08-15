@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.fias.House;
-import ru.fias.house.Houses;
 
 import java.math.BigDecimal;
 import java.sql.Connection;

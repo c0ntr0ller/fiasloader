@@ -61,7 +61,7 @@ public class ProceedFileController {
     private void proceedAddrObj(File sourceFile) throws Exception {
         long totalCnt = 0;
 
-        try(XMLFileReader xmlFileReader = new XMLFileReader(sourceFile)) {
+        try(XMLFileReader xmlFileReader = new XMLFileReader(sourceFile, ru.fias.Object.class)) {
             long start_nanotime = System.nanoTime();
 
 
@@ -96,15 +96,15 @@ public class ProceedFileController {
     private void proceedHouses(File sourceFile) {
         long totalCnt = 0;
 
-        try(XMLFileReader xmlFileReader = new XMLFileReader(sourceFile)){
+        try(XMLFileReader xmlFileReader = new XMLFileReader(sourceFile, House.class)){
             long start_nanotime = System.nanoTime();
-
 
             // бежим по файлу и создаем объекты
             while (xmlFileReader.hasNext()) {
                 log.info("House objects read started...");
 
                 List<House> houseList = xmlFileReader.readHousesFromStream(BATCH_SIZE);
+
 
                 totalCnt = totalCnt + houseList.size();
 

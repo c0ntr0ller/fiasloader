@@ -13,6 +13,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class XMLFileReader implements AutoCloseable {
     private XMLStreamReader xmlStreamReader;
     private Unmarshaller jaxbUnmarshaller;
 
-    public XMLFileReader(File inFile) throws IOException, XMLStreamException{
+    public XMLFileReader(File inFile, Class objClass) throws IOException, XMLStreamException, JAXBException {
 
         // подготовка к чтению файла
         bis = new BufferedInputStream(new FileInputStream(inFile));
@@ -31,6 +32,11 @@ public class XMLFileReader implements AutoCloseable {
         XMLInputFactory factory = XMLInputFactory.newInstance();
 
         xmlStreamReader = factory.createXMLStreamReader(bis);
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(objClass);
+
+        jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
     }
 
 
@@ -39,10 +45,6 @@ public class XMLFileReader implements AutoCloseable {
         if(xmlStreamReader == null || !xmlStreamReader.hasNext()){
             return null;
         }
-
-        JAXBContext jaxbContext = JAXBContext.newInstance(Object.class);
-
-        jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
         // лист для результата
         List<Object> addrObjList = new ArrayList<>();
@@ -86,10 +88,6 @@ public class XMLFileReader implements AutoCloseable {
             return null;
         }
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(House.class);
-
-        jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
         // лист для результата
         List<House> houseList = new ArrayList<>();
         // указатель на текущую ноду
@@ -97,6 +95,7 @@ public class XMLFileReader implements AutoCloseable {
         // счетчик чтений
         int count = 0;
 
+        BigInteger zeroBigInt = BigInteger.valueOf(0);
         // если в ридере еще есть что читать
         while (xmlStreamReader.hasNext()) {
             try {
@@ -107,10 +106,12 @@ public class XMLFileReader implements AutoCloseable {
                         xmlStreamReader.getLocalName().equalsIgnoreCase("House")) {
                     // создаем объект тип LocalNode
                     house = (House) jaxbUnmarshaller.unmarshal(xmlStreamReader);
-                    // добавляем в лист ноду
-                    houseList.add(house);
-                    // инкрементируем счетчик
-                    count++;
+                    if(house.getSTRSTATUS().equals(zeroBigInt)) {
+                        // добавляем в лист ноду
+                        houseList.add(house);
+                        // инкрементируем счетчик
+                        count++;
+                    }
                     if(count%arraySize == 0){
                         return houseList;
                     }
