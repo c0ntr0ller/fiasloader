@@ -11,10 +11,12 @@ import ru.progmatik.main.UtilClass;
 import java.io.File;
 import java.util.Map;
 
+/**
+ * класс работает по расписанию. Обнаруживает файлы в рабочей папке и запускает их в обработку
+ */
 @Service
 public class ProceedFilesSheduler {
     private static Logger log = LoggerFactory.getLogger(ProceedFilesSheduler.class);
-    private static final int timeRate = 24*60*60*1000;
 
     @Value("${archDir:}")
     String archDir;
@@ -25,18 +27,19 @@ public class ProceedFilesSheduler {
     @Autowired
     ProceedFileController proceedFileController;
 
-    @Scheduled(fixedRate = timeRate) // every day
+    @Scheduled(fixedRateString = "100000") //"${proceedperiod:86400000}") // default every day
     public void proceedFiasFiles() {
         // получаем список файлов в рабочей папке
 
         if(workDir == null || workDir.isEmpty()) {
-            workDir = System.getProperty("user.dir") + File.separatorChar + "work";
+            workDir = "work";
         }
         Map<Integer,File> workFilesMap = UtilClass.getDirFiles(workDir, "rar");
 
+        log.info(String.format("Files for proceed to database: $d", workFilesMap.size()));
         // обрабатываем их с переносом в архив
-        for (File file : workFilesMap.values()) {
-            proceedFileController.proceedFiasArchFile(file);
-        }
+//        for (File file : workFilesMap.values()) {
+            proceedFileController.proceedFiasArchFile(null);
+//        }
     }
 }

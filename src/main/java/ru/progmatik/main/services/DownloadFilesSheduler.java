@@ -36,9 +36,9 @@ public class DownloadFilesSheduler {
     private Map<Integer,File> archFilesMap = new HashMap<>();
     private Map<Integer,File> workFilesMap = new HashMap<>();
 
-    @Scheduled(fixedRate = 10000000) // * 10 * 60 * 1000) // every 10 minutes
+    @Scheduled(fixedRateString = "${downloadperiod:3600000}") // every hour
     public void checkAndGetFiasFiles(){
-//
+
 //        if (fiasFilesList != null){
 //            fiasFilesList.clear();
 //        }
@@ -58,17 +58,20 @@ public class DownloadFilesSheduler {
 
     private void downloadFiles(Map<Integer, String> filesMapForDownload) {
         // run by sorted list of versions
+        log.info(String.format("Start downloading %d file(s)", filesMapForDownload.size()));
+
         for (Integer versionId : filesMapForDownload.keySet().stream().sorted().collect(Collectors.toList())) {
             String url = filesMapForDownload.get(versionId);
 
-            File tmpDir = new File(System.getProperty("user.dir") + File.separatorChar + "tmp");
+            File tmpDir = new File("tmp");
             if(!tmpDir.exists()){
                 tmpDir.mkdir();
             }
 
-            String tmpfilename =  System.getProperty("user.dir") + File.separatorChar + "tmp" + File.separatorChar + versionId.toString() + ".rar";
+            String tmpfilename =  "tmp" + File.separatorChar + versionId.toString() + ".rar";
 
             try {
+                log.info(String.format("Download file %s ...", tmpfilename));
                 UtilClass.downLoadFileFromURL(tmpfilename, url);
                 File tmpFile = new File(tmpfilename);
                 if(tmpFile.exists()) {
@@ -79,6 +82,7 @@ public class DownloadFilesSheduler {
                 e.printStackTrace();
             }
         }
+        log.info("Downloading finished");
     }
 
     /**
@@ -98,14 +102,14 @@ public class DownloadFilesSheduler {
 
         // получаем список файлов в архивной папке
         if(archDir == null || archDir.isEmpty()) {
-            archDir = System.getProperty("user.dir") + File.separatorChar + "archive";
+            archDir = "archive";
         }
 
         archFilesMap = UtilClass.getDirFiles(archDir, "rar");
 
         // получаем список файлов в папке для обработки (возможно какие-то еще не обработались либо скачаны частично)
         if(workDir == null || workDir.isEmpty()) {
-            workDir = System.getProperty("user.dir") + File.separatorChar + "work";
+            workDir = "work";
         }
         workFilesMap = UtilClass.getDirFiles(workDir, "rar");
 

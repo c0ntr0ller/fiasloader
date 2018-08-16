@@ -55,7 +55,7 @@ public class DBService {
 
     public Connection getConnection() throws SQLException {
         if(connection == null || connection.isClosed()) {
-            connection = DriverManager.getConnection("jdbc:firebirdsql:172.16.0.18:/opt/firebird/bases/FIAS.fdb", props);
+            connection = DriverManager.getConnection("jdbc:firebirdsql:172.16.0.18:/home/bek/fias2.fdb", props);
         }
         return connection;
     }

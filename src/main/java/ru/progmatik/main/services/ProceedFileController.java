@@ -1,5 +1,6 @@
 package ru.progmatik.main.services;
 
+import com.github.junrar.Junrar;
 import com.github.junrar.exception.RarException;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import ru.fias.House;
 import ru.progmatik.main.DAO.AddrObjDAOBatchInsert;
 import ru.progmatik.main.DAO.HouseDAOBatchInsert;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.IOException;
@@ -27,12 +29,16 @@ public class ProceedFileController {
 
     private static Logger log = LoggerFactory.getLogger(ProceedFileController.class);
 
-    private static final File UNPACKFOLDER = new File(System.getProperty("user.dir") + File.separatorChar + "unpack");
+    private static final File UNPACKFOLDER = new File("unpack");
 
     public void proceedFiasArchFile(final File fiasArchFile){
 
         try{
-            if(extractArchFile(fiasArchFile)){
+            boolean unpackSuccess = true;
+            if(fiasArchFile != null){
+                unpackSuccess = extractArchFile(fiasArchFile);
+            }
+            if(unpackSuccess){
                 for (File sourceFile: Objects.requireNonNull(UNPACKFOLDER.listFiles())) {
                     if(!sourceFile.isDirectory()
                             && FilenameUtils.getExtension(sourceFile.getName()).equalsIgnoreCase("xml")) {
@@ -58,7 +64,7 @@ public class ProceedFileController {
     @Autowired
     AddrObjDAOBatchInsert addrObjDAOBatchInsert;
 
-    private void proceedAddrObj(File sourceFile) throws Exception {
+    private void proceedAddrObj(File sourceFile){
         long totalCnt = 0;
 
         try(XMLFileReader xmlFileReader = new XMLFileReader(sourceFile, ru.fias.Object.class)) {
@@ -67,7 +73,7 @@ public class ProceedFileController {
 
             // бежим по файлу и создаем объекты
             while (xmlFileReader.hasNext()) {
-                log.info("Address objects read started...");
+//                log.info("Address objects read started...");
 
                 List<Object> objectList = xmlFileReader.readAddrObjFromStream(BATCH_SIZE);
 
@@ -83,9 +89,10 @@ public class ProceedFileController {
                     diff = totalCnt / duration;
                 }
 
-                log.info(String.format("Records inserted: %d; Avg. speed: %d records/sec", totalCnt, diff));
+                log.info(String.format("Address objects inserted: %d; Avg. speed: %d records/sec", totalCnt, diff));
             }
-        } catch (XMLStreamException | IOException e) {
+            log.info("Address objects insert finished");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -101,7 +108,7 @@ public class ProceedFileController {
 
             // бежим по файлу и создаем объекты
             while (xmlFileReader.hasNext()) {
-                log.info("House objects read started...");
+//                log.info("House objects read started...");
 
                 List<House> houseList = xmlFileReader.readHousesFromStream(BATCH_SIZE);
 
@@ -118,8 +125,10 @@ public class ProceedFileController {
                     diff = totalCnt / duration;
                 }
 
-                log.info(String.format("Records inserted: %d; Avg. speed: %d records/sec", totalCnt, diff));
+                log.info(String.format("House objects inserted: %d; Avg. speed: %d records/sec", totalCnt, diff));
             }
+
+            log.info("House objects insert finished");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,7 +145,7 @@ public class ProceedFileController {
 
         log.info("extract file" + fiasRarFile.toPath());
 
-//        Junrar.extract(fiasRarFile, UNPACKFOLDER);
+        Junrar.extract(fiasRarFile, UNPACKFOLDER);
 
         log.info(fiasRarFile.toPath() + " extracted");
 
@@ -151,9 +160,9 @@ public class ProceedFileController {
         clearUnpackFolder();
     }
     private void clearUnpackFolder(){
-//        for(File file : Objects.requireNonNull(UNPACKFOLDER.listFiles())){
-//            file.delete();
-//        }
-
+        for(File file : Objects.requireNonNull(UNPACKFOLDER.listFiles())){
+            file.delete();
+        }
+        log.info("Unpack folder cleared");
     }
 }
