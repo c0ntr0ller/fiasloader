@@ -17,12 +17,12 @@
 #        password: 222
 
 driver: org.firebirdsql.jdbc.FBDriver
-databaseurl: 172.16.0.18:/opt/firebird/bases/FIAS.fdb
-username: SYSDBA
+databaseurl: jdbc:firebirdsql:172.16.0.18:/home/bek/fias2.fdb
+user: SYSDBA
 password: 111
 encoding: WIN1251
 
 fiasurl: http://fias.nalog.ru/WebServices/Public/DownloadService.asmx
-batch_size: 10000
+batch_size: 1000
 proceedperiod: 86400000
 downloadperiod: 3600000

@@ -14,6 +14,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ *  компонент предназначен для занесения объектов типа AddrObj в базу данных
+ */
 @Component
 public class AddrObjDAOBatchInsert {
     private static Logger log = LoggerFactory.getLogger(AddrObjDAOBatchInsert.class);
@@ -60,14 +63,13 @@ public class AddrObjDAOBatchInsert {
     @Value("${batchsize:1000}")
     private int BATCH_SIZE;
 
-    @Autowired
-    DBService dbService;
 
-    public void insertAddrObjArray(List<Object> objectList){
+
+    public void insertAddrObjArray(List<Object> objectList, Connection connection) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
         int count = 0;
 
-        try(Connection connection = dbService.getConnection();
-                PreparedStatement statement = connection.prepareStatement(ADDROBJ_INSERT_QUERY)){
+        try(PreparedStatement statement = connection.prepareStatement(ADDROBJ_INSERT_QUERY)){
+
             connection.setAutoCommit(false);
 
             for (Object addrobj:objectList) {
@@ -108,16 +110,6 @@ public class AddrObjDAOBatchInsert {
                 statement.setString(34, addrobj.getSEXTCODE());
                 statement.setBigDecimal(35, new BigDecimal(addrobj.getLIVESTATUS()));
                 statement.setString(36, addrobj.getNORMDOC());
-//                statement.setString(1, addrobj.getAOID());
-//                statement.setString(2, addrobj.getAOGUID());
-//                statement.setBigDecimal(3, new BigDecimal(addrobj.getCURRSTATUS()));
-//                statement.setByte(4, addrobj.getLIVESTATUS());
-//                statement.setString(5, addrobj.getOFFNAME());
-//                statement.setString(6, addrobj.getPARENTGUID());
-//                statement.setString(7, addrobj.getREGIONCODE());
-//                statement.setString(8, addrobj.getSHORTNAME());
-//                statement.setTimestamp(9, new Timestamp(addrobj.getSTARTDATE().toGregorianCalendar().getTimeInMillis()));
-
                 statement.addBatch();
 
                 count++;

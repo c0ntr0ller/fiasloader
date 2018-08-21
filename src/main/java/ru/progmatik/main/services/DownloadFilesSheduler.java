@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.progmatik.main.webclient.FiasClient;
-import ru.progmatik.main.UtilClass;
+import ru.progmatik.main.other.UtilClass;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,10 +26,10 @@ public class DownloadFilesSheduler {
     @Autowired
     private FiasClient fiasClient;
 
-    @Value("${archDir:}")
+    @Value("${archDir:archive}")
     String archDir;
 
-    @Value("${workDir:}")
+    @Value("${workDir:work}")
     String workDir;
 
     private List<DownloadFileInfo> fiasFilesList = new ArrayList<>();
@@ -39,21 +39,21 @@ public class DownloadFilesSheduler {
     @Scheduled(fixedRateString = "${downloadperiod:3600000}") // every hour
     public void checkAndGetFiasFiles(){
 
-//        if (fiasFilesList != null){
-//            fiasFilesList.clear();
-//        }
-//
-//        fiasFilesList = fiasClient.getAllDownloadFileList();
-//
-//        if(fiasFilesList == null || fiasFilesList.isEmpty()){
-//            log.error("Empty fias files list!");
-//            return;
-//        }
-//
-//        Map<Integer,String> filesMapForDownload = getFileMapForDownload();
-//
-//        // если список на скачивание непустой - запускаем скачивание
-//        downloadFiles(filesMapForDownload);
+        if (fiasFilesList != null){
+            fiasFilesList.clear();
+        }
+
+        fiasFilesList = fiasClient.getAllDownloadFileList();
+
+        if(fiasFilesList == null || fiasFilesList.isEmpty()){
+            log.error("Empty fias files list!");
+            return;
+        }
+
+        Map<Integer,String> filesMapForDownload = getFileMapForDownload();
+
+        // если список на скачивание непустой - запускаем скачивание
+        downloadFiles(filesMapForDownload);
     }
 
     private void downloadFiles(Map<Integer, String> filesMapForDownload) {

@@ -1,4 +1,4 @@
-package ru.progmatik.main.services;
+package ru.progmatik.main.other;
 
 import ru.fias.Object;
 import ru.fias.House;
@@ -17,6 +17,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ридер для больших XML-файлов.
+ */
 
 public class XMLFileReader implements AutoCloseable {
 
@@ -39,7 +42,13 @@ public class XMLFileReader implements AutoCloseable {
 
     }
 
-
+    /**
+     * метод читает из открытого в конструкторе потока заданное число объектов класса AddrObj
+     * @param arraySize
+     * @return
+     * @throws XMLStreamException
+     * @throws JAXBException
+     */
     public List<Object> readAddrObjFromStream(int arraySize) throws XMLStreamException, JAXBException {
 
         if(xmlStreamReader == null || !xmlStreamReader.hasNext()){
@@ -82,6 +91,13 @@ public class XMLFileReader implements AutoCloseable {
         return addrObjList;
     }
 
+    /**
+     * метод читает из открытого в конструкторе потока заданное число объектов класса House
+     * @param arraySize
+     * @return
+     * @throws XMLStreamException
+     * @throws JAXBException
+     */
     public List<House> readHousesFromStream(int arraySize) throws XMLStreamException, JAXBException {
 
         if(xmlStreamReader == null || !xmlStreamReader.hasNext()){
@@ -133,6 +149,10 @@ public class XMLFileReader implements AutoCloseable {
         xmlStreamReader.close();
     }
 
+    /**
+     * вспомогательный метод определения снаружи, что в ридере еще есть данные
+     * @return
+     */
     public boolean hasNext() {
         try {
             return xmlStreamReader.hasNext();

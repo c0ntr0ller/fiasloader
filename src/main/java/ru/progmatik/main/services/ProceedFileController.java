@@ -11,32 +11,41 @@ import org.springframework.stereotype.Service;
 import ru.fias.Object;
 import ru.fias.House;
 import ru.progmatik.main.DAO.AddrObjDAOBatchInsert;
+import ru.progmatik.main.DAO.DBService;
 import ru.progmatik.main.DAO.HouseDAOBatchInsert;
+import ru.progmatik.main.other.XMLFileReader;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.Connection;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * сервис предназначен для обработки скачанных файлов
+ */
 @Service
 public class ProceedFileController {
+    private static Logger log = LoggerFactory.getLogger(ProceedFileController.class);
 
     @Value("${batchsize:1000}")
     private int BATCH_SIZE;
 
-    private static Logger log = LoggerFactory.getLogger(ProceedFileController.class);
 
     private static final File UNPACKFOLDER = new File("unpack");
 
-    public void proceedFiasArchFile(final File fiasArchFile){
+    @Value("${archDir:archive}")
+    String archDir;
 
-        try{
+    public void proceedFiasRarFile(final File fiasRarFile){
+
+        try(Connection connection = dbService.getConnection()){
+
             boolean unpackSuccess = true;
-            if(fiasArchFile != null){
-                unpackSuccess = extractArchFile(fiasArchFile);
+
+            if(fiasRarFile != null){
+                unpackSuccess = extractRarFile(fiasRarFile);
             }
             if(unpackSuccess){
                 for (File sourceFile: Objects.requireNonNull(UNPACKFOLDER.listFiles())) {
@@ -44,14 +53,17 @@ public class ProceedFileController {
                             && FilenameUtils.getExtension(sourceFile.getName()).equalsIgnoreCase("xml")) {
                         String filename = FilenameUtils.getName(sourceFile.getName());
                         if(filename.contains("AS_ADDROBJ")){
-                            proceedAddrObj(sourceFile);
+                            proceedAddrObj(sourceFile, connection);
                         }
                         if(filename.contains("AS_HOUSE")){
-                            proceedHouses(sourceFile);
+                            proceedHouses(sourceFile, connection);
                         }
                     }
                 }
                 clearUnpackFolder();
+            }
+            if(fiasRarFile != null){
+                fiasRarFile.renameTo(new File(archDir + File.separatorChar + fiasRarFile.getName()));
             }
         } catch (IOException | RarException e) {
             e.printStackTrace();
@@ -64,12 +76,15 @@ public class ProceedFileController {
     @Autowired
     AddrObjDAOBatchInsert addrObjDAOBatchInsert;
 
-    private void proceedAddrObj(File sourceFile){
+    @Autowired
+    DBService dbService;
+
+    private void proceedAddrObj(File sourceFile, Connection connection){
         long totalCnt = 0;
 
         try(XMLFileReader xmlFileReader = new XMLFileReader(sourceFile, ru.fias.Object.class)) {
-            long start_nanotime = System.nanoTime();
 
+            long start_nanotime = System.nanoTime();
 
             // бежим по файлу и создаем объекты
             while (xmlFileReader.hasNext()) {
@@ -80,7 +95,7 @@ public class ProceedFileController {
                 totalCnt = totalCnt + objectList.size();
 
                 // insert into base here
-                addrObjDAOBatchInsert.insertAddrObjArray(objectList);
+                addrObjDAOBatchInsert.insertAddrObjArray(objectList, connection);
 
                 long end_nanotime = System.nanoTime();
                 long duration = ((end_nanotime - start_nanotime) / 1000000000);
@@ -100,7 +115,7 @@ public class ProceedFileController {
     @Autowired
     HouseDAOBatchInsert houseDAOBatchInsert;
 
-    private void proceedHouses(File sourceFile) {
+    private void proceedHouses(File sourceFile, Connection connection) {
         long totalCnt = 0;
 
         try(XMLFileReader xmlFileReader = new XMLFileReader(sourceFile, House.class)){
@@ -116,7 +131,7 @@ public class ProceedFileController {
                 totalCnt = totalCnt + houseList.size();
 
                 // insert into base here
-                houseDAOBatchInsert.insertHouseArray(houseList);
+                houseDAOBatchInsert.insertHouseArray(houseList, connection);
 
                 long end_nanotime = System.nanoTime();
                 long duration = ((end_nanotime - start_nanotime) / 1000000000);
@@ -134,7 +149,7 @@ public class ProceedFileController {
         }
     }
 
-    private boolean extractArchFile(File fiasRarFile) throws IOException, RarException {
+    private boolean extractRarFile(File fiasRarFile) throws IOException, RarException {
         if(fiasRarFile == null) return false;
 
         if (!Files.exists(fiasRarFile.toPath())) {

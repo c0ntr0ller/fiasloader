@@ -1,4 +1,4 @@
-package ru.progmatik.main;
+package ru.progmatik.main.other;
 
 import org.apache.commons.io.FilenameUtils;
 

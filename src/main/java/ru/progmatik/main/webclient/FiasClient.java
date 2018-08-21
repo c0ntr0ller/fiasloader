@@ -11,12 +11,15 @@ import org.springframework.ws.soap.client.core.SoapActionCallback;
 
 import java.util.List;
 
+/**
+ * веб-клиент для получения списка файлов ФИАС
+ */
 public class FiasClient extends WebServiceGatewaySupport {
+    private static final Logger log = LoggerFactory.getLogger(FiasClient.class);
 
     @Value("${fiasurl}")
     private String fiasurl;
 
-    private static final Logger log = LoggerFactory.getLogger(FiasClient.class);
 
     public List<DownloadFileInfo> getAllDownloadFileList(){
         GetAllDownloadFileInfo request = new GetAllDownloadFileInfo();

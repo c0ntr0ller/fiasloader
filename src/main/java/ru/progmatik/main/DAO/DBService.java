@@ -1,8 +1,9 @@
 package ru.progmatik.main.DAO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -10,52 +11,77 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * компонент, предоставляющий доступ к базе данных
+ */
+
 @Component
 public class DBService {
+    private static Logger log = LoggerFactory.getLogger(DBService.class);
     private static DBService dbService;
     private static Connection connection;
     private static Properties props;
 
-//    @Value("${driver:org.firebirdsql.jdbc.FBDriver}")
-//    private String driver;
-//
-//    @Value("${databaseurl}")
-//    private String databaseurl;
-//
-//    @Value("${username:SYSDBA}")
-//    private String username;
-//
-//    @Value("${password:masterkey}")
-//    private String password;
-//
-//    @Value("${role:}")
-//    private String role;
-//
-//    @Value("${encoding:WIN1251}")
-//    private String encoding;
+    @Value("${archDir:}")
+    String archDir;
 
-    public static DBService instance() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        if(dbService == null){
-            dbService = new DBService();
-        }
-        return dbService;
-    }
-    private DBService() throws ClassNotFoundException, IllegalAccessException, InstantiationException, SQLException {
-        DriverManager.registerDriver((Driver) Class.forName("org.firebirdsql.jdbc.FBDriver").newInstance());
-        props = new Properties();
+    @Value("${driver:org.firebirdsql.jdbc.FBDriver}")
+    String driver;
 
-        props.setProperty("userName", "SYSDBA");
-        props.setProperty("password", "111");
-//            if(!role.isEmpty()) props.setProperty("role", role);
-//            if(!encoding.isEmpty())
-        props.setProperty("encoding", "WIN1251");
+    @Value("${databaseurl}")
+    String databaseurl;
 
-        getConnection();
-    }
+    @Value("${dbuser:SYSDBA}")
+    String dbuser;
 
-    public Connection getConnection() throws SQLException {
+    @Value("${password:masterkey}")
+    String password;
+
+    @Value("${role:}")
+    String role;
+
+    @Value("${encoding:WIN1251}")
+    String encoding;
+
+//    public static DBService instance() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+//        if(dbService == null){
+//            dbService = new DBService();
+//        }
+//        return dbService;
+//    }
+//    private DBService() throws ClassNotFoundException, IllegalAccessException, InstantiationException, SQLException {
+//        DriverManager.registerDriver((Driver) Class.forName(driver).newInstance());
+//        props = new Properties();
+//
+//        props.setProperty("userName", username);
+//        props.setProperty("password", password);
+//        if(!role.isEmpty()) props.setProperty("role", role);
+//        if(!encoding.isEmpty()) props.setProperty("encoding", encoding);
+//
+//        //        DriverManager.registerDriver((Driver) Class.forName("org.firebirdsql.jdbc.FBDriver").newInstance());
+//
+//        getConnection();
+//    }
+
+    public Connection getConnection() throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         if(connection == null || connection.isClosed()) {
-            connection = DriverManager.getConnection("jdbc:firebirdsql:172.16.0.18:/home/bek/fias2.fdb", props);
+            DriverManager.registerDriver((Driver) Class.forName(driver).newInstance());
+
+//            log.info("driver:" + driver);
+//            log.info("databaseurl:" + databaseurl);
+//            log.info("dbuser:" + dbuser);
+//            log.info("password:" + password);
+//            log.info("role:" + role);
+
+            props = new Properties();
+
+            props.setProperty("user", dbuser);
+            props.setProperty("password", password);
+            if(!role.isEmpty()) props.setProperty("role", role);
+            if(!encoding.isEmpty()) props.setProperty("encoding", encoding);
+
+            connection = DriverManager.getConnection(databaseurl, props);
+//            connection = DriverManager.getConnection("jdbc:firebirdsql:172.16.0.18:/home/bek/fias2.fdb", props);
         }
         return connection;
     }

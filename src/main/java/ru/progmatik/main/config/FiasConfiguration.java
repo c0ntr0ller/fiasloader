@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import ru.progmatik.main.webclient.FiasClient;
 
+/**
+ * класс конфигурации для бинов маршаллинга
+ */
 @Configuration
 public class FiasConfiguration {
 

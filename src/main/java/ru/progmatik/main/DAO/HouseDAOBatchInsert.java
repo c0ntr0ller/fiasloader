@@ -12,7 +12,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
-
+/**
+ *  компонент предназначен для занесения объектов типа House в базу данных
+ */
 @Component
 public class HouseDAOBatchInsert {
     private static Logger log = LoggerFactory.getLogger(HouseDAOBatchInsert.class);
@@ -25,11 +27,10 @@ public class HouseDAOBatchInsert {
     @Autowired
     DBService dbService;
 
-    public void insertHouseArray(List<House> houseList){
+    public void insertHouseArray(List<House> houseList, Connection connection) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
         int count = 0;
 
-        try(Connection connection = dbService.getConnection();
-                PreparedStatement statement = connection.prepareStatement(HOUSE_INSERT_QUERY)){
+        try(PreparedStatement statement = connection.prepareStatement(HOUSE_INSERT_QUERY)){
             connection.setAutoCommit(false);
 
             for (House house:houseList) {

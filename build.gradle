@@ -83,6 +83,7 @@ dependencies {
     compile ("org.firebirdsql.jdbc:jaybird-jdk18:3.0.4")
 
     compile("org.springframework.ws:spring-ws-core")
+
     compile(files(genJaxb.classesDir).builtBy(genJaxb))
 
     jaxb "com.sun.xml.bind:jaxb-xjc:2.1.7"
