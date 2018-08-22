@@ -27,7 +27,7 @@ import java.util.Objects;
  */
 @Service
 public class ProceedFileController {
-    private static Logger log = LoggerFactory.getLogger(ProceedFileController.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value("${batchsize:1000}")
     private int BATCH_SIZE;
@@ -65,9 +65,8 @@ public class ProceedFileController {
             if(fiasRarFile != null){
                 fiasRarFile.renameTo(new File(archDir + File.separatorChar + fiasRarFile.getName()));
             }
-        } catch (IOException | RarException e) {
-            e.printStackTrace();
         } catch (Exception e) {
+            logger.error("proceedFiasRarFile error", e);
             e.printStackTrace();
         }
     }
@@ -88,7 +87,7 @@ public class ProceedFileController {
 
             // бежим по файлу и создаем объекты
             while (xmlFileReader.hasNext()) {
-//                log.info("Address objects read started...");
+//                logger.info("Address objects read started...");
 
                 List<Object> objectList = xmlFileReader.readAddrObjFromStream(BATCH_SIZE);
 
@@ -104,10 +103,11 @@ public class ProceedFileController {
                     diff = totalCnt / duration;
                 }
 
-                log.info(String.format("Address objects inserted: %d; Avg. speed: %d records/sec", totalCnt, diff));
+                logger.info(String.format("Address objects inserted: %d; Avg. speed: %d records/sec", totalCnt, diff));
             }
-            log.info("Address objects insert finished");
+            logger.info("Address objects insert finished");
         } catch (Exception e) {
+            logger.error("proceedAddrObj error", e);
             e.printStackTrace();
         }
     }
@@ -123,7 +123,7 @@ public class ProceedFileController {
 
             // бежим по файлу и создаем объекты
             while (xmlFileReader.hasNext()) {
-//                log.info("House objects read started...");
+//                logger.info("House objects read started...");
 
                 List<House> houseList = xmlFileReader.readHousesFromStream(BATCH_SIZE);
 
@@ -140,11 +140,12 @@ public class ProceedFileController {
                     diff = totalCnt / duration;
                 }
 
-                log.info(String.format("House objects inserted: %d; Avg. speed: %d records/sec", totalCnt, diff));
+                logger.info(String.format("House objects inserted: %d; Avg. speed: %d records/sec", totalCnt, diff));
             }
 
-            log.info("House objects insert finished");
+            logger.info("House objects insert finished");
         } catch (Exception e) {
+            logger.error("proceedHouses error", e);
             e.printStackTrace();
         }
     }
@@ -158,11 +159,11 @@ public class ProceedFileController {
 
         prepareUnpackFolder();
 
-        log.info("extract file" + fiasRarFile.toPath());
+        logger.info("extract file" + fiasRarFile.toPath());
 
         Junrar.extract(fiasRarFile, UNPACKFOLDER);
 
-        log.info(fiasRarFile.toPath() + " extracted");
+        logger.info(fiasRarFile.toPath() + " extracted");
 
         return true;
     }
@@ -178,6 +179,6 @@ public class ProceedFileController {
         for(File file : Objects.requireNonNull(UNPACKFOLDER.listFiles())){
             file.delete();
         }
-        log.info("Unpack folder cleared");
+        logger.info("Unpack folder cleared");
     }
 }

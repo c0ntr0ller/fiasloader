@@ -17,7 +17,7 @@ import java.util.Properties;
 
 @Component
 public class DBService {
-    private static Logger log = LoggerFactory.getLogger(DBService.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private static DBService dbService;
     private static Connection connection;
     private static Properties props;

@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Component
 public class HouseDAOBatchInsert {
-    private static Logger log = LoggerFactory.getLogger(HouseDAOBatchInsert.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private static final String HOUSE_INSERT_QUERY = "insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus) values(?, ?, ?, ?, ?, ?)";
 
@@ -57,7 +57,7 @@ public class HouseDAOBatchInsert {
                 connection.commit();
             }
         } catch ( SQLException e) {
-            log.error("Error inserting Houses", e);
+            logger.error("Error inserting Houses", e);
             e.printStackTrace();
         }
     }

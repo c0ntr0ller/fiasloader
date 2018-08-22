@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class DownloadFilesSheduler {
-    private static Logger log = LoggerFactory.getLogger(DownloadFilesSheduler.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private FiasClient fiasClient;
@@ -46,7 +46,7 @@ public class DownloadFilesSheduler {
         fiasFilesList = fiasClient.getAllDownloadFileList();
 
         if(fiasFilesList == null || fiasFilesList.isEmpty()){
-            log.error("Empty fias files list!");
+            logger.error("Empty fias files list!");
             return;
         }
 
@@ -58,7 +58,7 @@ public class DownloadFilesSheduler {
 
     private void downloadFiles(Map<Integer, String> filesMapForDownload) {
         // run by sorted list of versions
-        log.info(String.format("Start downloading %d file(s)", filesMapForDownload.size()));
+        logger.info(String.format("Start downloading %d file(s)", filesMapForDownload.size()));
 
         for (Integer versionId : filesMapForDownload.keySet().stream().sorted().collect(Collectors.toList())) {
             String url = filesMapForDownload.get(versionId);
@@ -71,18 +71,18 @@ public class DownloadFilesSheduler {
             String tmpfilename =  "tmp" + File.separatorChar + versionId.toString() + ".rar";
 
             try {
-                log.info(String.format("Download file %s ...", tmpfilename));
+                logger.info(String.format("Download file %s ...", tmpfilename));
                 UtilClass.downLoadFileFromURL(tmpfilename, url);
                 File tmpFile = new File(tmpfilename);
                 if(tmpFile.exists()) {
                     tmpFile.renameTo(new File(workDir + File.separatorChar + tmpFile.getName()));
                 }
             } catch (IOException e) {
-                log.error("Exception while downloading file " + url);
+                logger.error("Exception while downloading file " + url);
                 e.printStackTrace();
             }
         }
-        log.info("Downloading finished");
+        logger.info("Downloading finished");
     }
 
     /**

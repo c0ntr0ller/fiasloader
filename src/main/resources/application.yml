@@ -26,3 +26,8 @@ fiasurl: http://fias.nalog.ru/WebServices/Public/DownloadService.asmx
 batch_size: 1000
 proceedperiod: 86400000
 downloadperiod: 3600000
+
+logging:
+  level:
+    root: info
+  file: log/application.log

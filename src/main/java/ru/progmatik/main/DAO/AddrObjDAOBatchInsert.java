@@ -2,7 +2,6 @@ package ru.progmatik.main.DAO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.fias.Object;
@@ -19,7 +18,7 @@ import java.util.List;
  */
 @Component
 public class AddrObjDAOBatchInsert {
-    private static Logger log = LoggerFactory.getLogger(AddrObjDAOBatchInsert.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private static final String ADDROBJ_INSERT_QUERY = "update or insert into addrobj(" +
             "actstatus," +
@@ -127,7 +126,7 @@ public class AddrObjDAOBatchInsert {
                 connection.commit();
             }
         } catch ( SQLException e) {
-            log.error("Error inserting Object", e);
+            logger.error("Error inserting Object", e);
             e.printStackTrace();
         }
     }

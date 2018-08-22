@@ -1,5 +1,7 @@
 package ru.progmatik.main.other;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.fias.Object;
 import ru.fias.House;
 
@@ -22,6 +24,7 @@ import java.util.List;
  */
 
 public class XMLFileReader implements AutoCloseable {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private BufferedInputStream bis;
     private XMLStreamReader xmlStreamReader;
@@ -82,6 +85,7 @@ public class XMLFileReader implements AutoCloseable {
                 }
                 // если достигли установленного размера - возвращаем лист
             } catch (XMLStreamException e1) {
+                logger.error("Read addrObj from XMLstream error", e1);
                 e1.printStackTrace();
             }
         }
@@ -134,6 +138,7 @@ public class XMLFileReader implements AutoCloseable {
                 }
                 // если достигли установленного размера - возвращаем лист
             } catch (XMLStreamException e1) {
+                logger.error("Read house from XMLstream error", e1);
                 e1.printStackTrace();
             }
         }
@@ -157,6 +162,7 @@ public class XMLFileReader implements AutoCloseable {
         try {
             return xmlStreamReader.hasNext();
         } catch (XMLStreamException e) {
+            logger.error("StreamReader hasNext error", e);
             e.printStackTrace();
             return false;
         }

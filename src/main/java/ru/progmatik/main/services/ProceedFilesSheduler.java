@@ -16,7 +16,7 @@ import java.util.Map;
  */
 @Service
 public class ProceedFilesSheduler {
-    private static Logger log = LoggerFactory.getLogger(ProceedFilesSheduler.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value("${archDir:}")
     String archDir;
@@ -36,7 +36,7 @@ public class ProceedFilesSheduler {
         }
         Map<Integer,File> workFilesMap = UtilClass.getDirFiles(workDir, "rar");
 
-        log.info(String.format("Files for proceed to database: %d", workFilesMap.size()));
+        logger.info(String.format("Files for proceed to database: %d", workFilesMap.size()));
         // обрабатываем их с переносом в архив
         for (File file : workFilesMap.values()) {
             proceedFileController.proceedFiasRarFile(file);

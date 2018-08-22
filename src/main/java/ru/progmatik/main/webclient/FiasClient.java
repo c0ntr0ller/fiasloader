@@ -15,7 +15,7 @@ import java.util.List;
  * веб-клиент для получения списка файлов ФИАС
  */
 public class FiasClient extends WebServiceGatewaySupport {
-    private static final Logger log = LoggerFactory.getLogger(FiasClient.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Value("${fiasurl}")
     private String fiasurl;
@@ -24,7 +24,7 @@ public class FiasClient extends WebServiceGatewaySupport {
     public List<DownloadFileInfo> getAllDownloadFileList(){
         GetAllDownloadFileInfo request = new GetAllDownloadFileInfo();
 
-        log.info("Requesting FIAS files list");
+        LOGGER.info("Requesting FIAS files list");
 
         GetAllDownloadFileInfoResponse response = (GetAllDownloadFileInfoResponse) getWebServiceTemplate().
                 marshalSendAndReceive(fiasurl, request,
