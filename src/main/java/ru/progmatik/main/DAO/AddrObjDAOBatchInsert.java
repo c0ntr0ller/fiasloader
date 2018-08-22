@@ -21,7 +21,7 @@ import java.util.List;
 public class AddrObjDAOBatchInsert {
     private static Logger log = LoggerFactory.getLogger(AddrObjDAOBatchInsert.class);
 
-    private static final String ADDROBJ_INSERT_QUERY = "  insert into addrobj(" +
+    private static final String ADDROBJ_INSERT_QUERY = "update or insert into addrobj(" +
             "actstatus," +
             "aoguid," +
             "aoid," +
@@ -58,7 +58,8 @@ public class AddrObjDAOBatchInsert {
             "sextcode," +
             "livestatus," +
             "normdoc)" +
-            "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) " +
+            "matching(aoid)";
 
     @Value("${batchsize:1000}")
     private int BATCH_SIZE;
