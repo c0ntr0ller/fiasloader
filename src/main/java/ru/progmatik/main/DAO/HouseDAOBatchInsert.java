@@ -19,7 +19,9 @@ import java.util.List;
 public class HouseDAOBatchInsert {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private static final String HOUSE_INSERT_QUERY = "insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus) values(?, ?, ?, ?, ?, ?)";
+    private static final String HOUSE_INSERT_QUERY = "update or insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus) " +
+            "values(?, ?, ?, ?, ?, ?)" +
+            "matching(houseid)";
 
     @Value("${batchsize:1000}")
     private int BATCH_SIZE;
