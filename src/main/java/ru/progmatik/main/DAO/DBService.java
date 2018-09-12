@@ -32,7 +32,7 @@ public class DBService {
     String databaseurl;
 
     @Value("${dbuser:SYSDBA}")
-    String dbuser;
+    String user;
 
     @Value("${password:masterkey}")
     String password;
@@ -75,8 +75,8 @@ public class DBService {
 
             props = new Properties();
 
-            props.setProperty("user", dbuser);
-            props.setProperty("password", password);
+            if(!user.isEmpty()) props.setProperty("user", user);
+            if(!password.isEmpty()) props.setProperty("password", password);
             if(!role.isEmpty()) props.setProperty("role", role);
             if(!encoding.isEmpty()) props.setProperty("encoding", encoding);
 

@@ -17,15 +17,17 @@
 #        password: 222
 
 driver: org.firebirdsql.jdbc.FBDriver
-databaseurl: jdbc:firebirdsql:172.16.0.18:/home/bek/fias2.fdb
+databaseurl: jdbc:firebirdsql:172.16.0.203:fias
 user: SYSDBA
-password: 111
+password: masterkey
 encoding: WIN1251
 
 fiasurl: http://fias.nalog.ru/WebServices/Public/DownloadService.asmx
 batch_size: 1000
 proceedperiod: 86400000
 downloadperiod: 3600000
+house_query: update or insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus) values(?, ?, ?, ?, ?, ?)matching(houseid)
+addrobj_query: update or insert into addrobj(aoguid,aoid,aolevel,citycode,currstatus,formalname,nextid,offname,operstatus,parentguid,placecode,previd,regioncode,shortname,streetcode,livestatus)values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) matching(aoid)
 
 logging:
   level:

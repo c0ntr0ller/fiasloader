@@ -19,9 +19,9 @@ import java.util.List;
 public class HouseDAOBatchInsert {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private static final String HOUSE_INSERT_QUERY = "update or insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus) " +
-            "values(?, ?, ?, ?, ?, ?)" +
-            "matching(houseid)";
+
+    @Value("${house_query:\"update or insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus) values(?, ?, ?, ?, ?, ?)matching(houseid)\"}")
+    private String house_query;
 
     @Value("${batchsize:1000}")
     private int BATCH_SIZE;
@@ -32,7 +32,7 @@ public class HouseDAOBatchInsert {
     public void insertHouseArray(List<House> houseList, Connection connection) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
         int count = 0;
 
-        try(PreparedStatement statement = connection.prepareStatement(HOUSE_INSERT_QUERY)){
+        try(PreparedStatement statement = connection.prepareStatement(house_query)){
             connection.setAutoCommit(false);
 
             for (House house:houseList) {

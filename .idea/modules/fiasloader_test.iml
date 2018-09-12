@@ -24,6 +24,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Gradle: org.postgresql:postgresql:42.2.2" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter:2.0.3.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: com.github.junrar:junrar:2.0.0" level="project" />
     <orderEntry type="library" name="Gradle: org.firebirdsql.jdbc:jaybird-jdk18:3.0.4" level="project" />

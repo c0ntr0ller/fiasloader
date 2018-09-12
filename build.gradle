@@ -18,10 +18,10 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-bootJar {
-    baseName = 'fiasloader'
-    version =  '0.0.2'
-}
+//bootJar {
+//    baseName = 'fiasloader'
+//    version =  '0.0.2'
+//}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -73,7 +73,7 @@ task genJaxb {
 dependencies {
     compileOnly "org.projectlombok:lombok:1.16.16"
 
-//    compile 'org.postgresql:postgresql:42.2.2'
+    compile 'org.postgresql:postgresql:42.2.2'
 
     compile("org.springframework.boot:spring-boot-starter")
 
@@ -92,8 +92,8 @@ dependencies {
 }
 
 bootJar {
-    baseName = 'fiasloader-util'
-    version =  '0.1.0'
+    baseName = 'fiasloader'
+    version =  '0.1.2'
 
     from genJaxb.classesDir
 }
