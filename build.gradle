@@ -34,7 +34,7 @@ repositories {
 task genJaxb {
     ext.sourcesDir = "${buildDir}/generated-sources/jaxb"
     ext.classesDir = "${buildDir}/classes/jaxb"
-    ext.schema = "http://fias.nalog.ru/WebServices/Public/DownloadService.asmx?wsdl"
+    ext.schema = "https://fias.nalog.ru/WebServices/Public/DownloadService.asmx?wsdl"
 
     outputs.dir classesDir
 
@@ -85,6 +85,10 @@ dependencies {
     compile("org.springframework.ws:spring-ws-core")
 
     compile(files(genJaxb.classesDir).builtBy(genJaxb))
+
+// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.6'
+
 
     jaxb "com.sun.xml.bind:jaxb-xjc:2.1.7"
 

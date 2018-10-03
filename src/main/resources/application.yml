@@ -22,7 +22,12 @@ user: SYSDBA
 password: masterkey
 encoding: WIN1251
 
-fiasurl: http://fias.nalog.ru/WebServices/Public/DownloadService.asmx
+client:
+  default-uri: https://fias.nalog.ru/WebServices/Public/DownloadService.asmx
+  ssl:
+    trust-store: classpath:jks/nalog.ru.jks
+    trust-store-password: nalog.ru-pass
+
 batch_size: 1000
 proceedperiod: 86400000
 downloadperiod: 3600000
