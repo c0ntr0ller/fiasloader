@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.progmatik.main.webclient.FiasClient;
 import ru.progmatik.main.other.UtilClass;
 
+import javax.xml.soap.SOAPException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -37,7 +38,7 @@ public class DownloadFilesSheduler {
     private Map<Integer,File> workFilesMap = new HashMap<>();
 
     @Scheduled(fixedRateString = "${downloadperiod:3600000}") // every hour
-    public void checkAndGetFiasFiles(){
+    public void checkAndGetFiasFiles() throws SOAPException {
 
         if (fiasFilesList != null){
             fiasFilesList.clear();

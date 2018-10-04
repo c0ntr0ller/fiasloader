@@ -11,9 +11,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.ws.transport.http.HttpComponentsMessageSender;
+import ru.progmatik.main.messagehandler.ClientMessageHandler;
+import ru.progmatik.main.messagehandler.DefaultHandlerResolver;
 import ru.progmatik.main.webclient.FiasClient;
 
 import javax.net.ssl.SSLContext;
+import javax.xml.ws.handler.Handler;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * класс конфигурации для бинов маршаллинга
@@ -44,32 +49,42 @@ public class FiasConfiguration {
         client.setDefaultUri(fiasurl);
         client.setUnmarshaller(marshaller);
         client.setMarshaller(marshaller);
-        client.setMessageSender(httpComponentsMessageSender());
+//        client.setMessageSender(httpComponentsMessageSender());
 
         return client;
     }
 
-    @Bean
-    public HttpComponentsMessageSender httpComponentsMessageSender() throws Exception {
-        HttpComponentsMessageSender httpComponentsMessageSender = new HttpComponentsMessageSender();
-        httpComponentsMessageSender.setHttpClient(httpClient());
+//    @Bean
+//    public HttpComponentsMessageSender httpComponentsMessageSender() throws Exception {
+//        HttpComponentsMessageSender httpComponentsMessageSender = new HttpComponentsMessageSender();
+//        httpComponentsMessageSender.setHttpClient(httpClient());
+//
+//        return httpComponentsMessageSender;
+//    }
+//
+//    public HttpClient httpClient() throws Exception {
+//        return HttpClientBuilder.create().setSSLSocketFactory(sslConnectionSocketFactory())
+//                .addInterceptorFirst(new HttpComponentsMessageSender.RemoveSoapHeadersInterceptor()).build();
+//    }
+//
+//    public SSLConnectionSocketFactory sslConnectionSocketFactory() throws Exception {
+//        // NoopHostnameVerifier essentially turns hostname verification off as otherwise following error
+//        // is thrown: java.security.cert.CertificateException: No name matching localhost found
+//        return new SSLConnectionSocketFactory(sslContext(), NoopHostnameVerifier.INSTANCE);
+//    }
+//
+//    public SSLContext sslContext() throws Exception {
+//        return SSLContextBuilder.create()
+//                .loadTrustMaterial(trustStore.getFile(), trustStorePassword.toCharArray()).build();
+//    }
 
-        return httpComponentsMessageSender;
-    }
 
-    public HttpClient httpClient() throws Exception {
-        return HttpClientBuilder.create().setSSLSocketFactory(sslConnectionSocketFactory())
-                .addInterceptorFirst(new HttpComponentsMessageSender.RemoveSoapHeadersInterceptor()).build();
-    }
-
-    public SSLConnectionSocketFactory sslConnectionSocketFactory() throws Exception {
-        // NoopHostnameVerifier essentially turns hostname verification off as otherwise following error
-        // is thrown: java.security.cert.CertificateException: No name matching localhost found
-        return new SSLConnectionSocketFactory(sslContext(), NoopHostnameVerifier.INSTANCE);
-    }
-
-    public SSLContext sslContext() throws Exception {
-        return SSLContextBuilder.create()
-                .loadTrustMaterial(trustStore.getFile(), trustStorePassword.toCharArray()).build();
+    public DefaultHandlerResolver handlerResolver(){
+        final DefaultHandlerResolver defaultHandlerResolver = new DefaultHandlerResolver();
+        final ClientMessageHandler clientMessageHandler = new ClientMessageHandler();
+        List<Handler> handlerList = new ArrayList<>();
+        handlerList.add(clientMessageHandler);
+        defaultHandlerResolver.setHandlerList(handlerList);
+        return defaultHandlerResolver;
     }
 }
