@@ -4,7 +4,9 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,11 +43,27 @@ public class UtilClass {
 
         if (canWrite) {
             copyURLToFile(
-                    new URL(url),
+                    new URL(checkUrlFoRedirect(url)),
                     new File(filename),
                     60*60*1000,
                     12*60*60*1000);
         }
+    }
+
+    /**
+     * check URL for redirect an return old or new URL
+     * @param url
+     * @return
+     * @throws MalformedURLException
+     */
+    public static String checkUrlFoRedirect(String url) throws IOException {
+        URL hh= new URL(url);
+        URLConnection connection = hh.openConnection();
+        String redirect = connection.getHeaderField("Location");
+        if (redirect != null){
+            url = redirect;
+        }
+        return url;
     }
 
 

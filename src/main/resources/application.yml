@@ -23,7 +23,7 @@ password: masterkey
 encoding: WIN1251
 
 client:
-  default-uri: https://fias.nalog.ru/WebServices/Public/DownloadService.asmx
+  default-uri: http://fias.nalog.ru/WebServices/Public/DownloadService.asmx
   ssl:
     trust-store: classpath:jks/nalog.ru.jks
     trust-store-password: nalog.ru-pass

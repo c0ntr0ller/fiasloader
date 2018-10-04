@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import static ru.progmatik.main.other.UtilClass.checkUrlFoRedirect;
+
 /**
  * веб-клиент для получения списка файлов ФИАС
  */
@@ -32,7 +34,7 @@ public class FiasClient extends WebServiceGatewaySupport {
     @Value("${client.default-uri}")
     private String fiasurl;
 
-    public List<DownloadFileInfo> getAllDownloadFileList() throws SOAPException {
+    public List<DownloadFileInfo> getAllDownloadFileList() throws SOAPException, IOException {
 
 
         LOGGER.info("Requesting FIAS files list");
@@ -45,10 +47,12 @@ public class FiasClient extends WebServiceGatewaySupport {
         WebServiceTemplate webServiceTemplate = getWebServiceTemplate();
         webServiceTemplate.setMessageFactory(saajSoapMessageFactory);
 
+        String realURL = checkUrlFoRedirect(fiasurl);
+
         GetAllDownloadFileInfoResponse response = (GetAllDownloadFileInfoResponse) webServiceTemplate.
-                marshalSendAndReceive(fiasurl, request,
+                marshalSendAndReceive(realURL, request,
                         new SoapActionCallback(
-                                fiasurl + "/GetAllDownloadFileInfo")
+                                realURL + "/GetAllDownloadFileInfo")
 //                        {
 //                            @Override
 //                            public void doWithMessage(WebServiceMessage message) throws IOException {

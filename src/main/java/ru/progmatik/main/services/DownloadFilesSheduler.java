@@ -38,7 +38,7 @@ public class DownloadFilesSheduler {
     private Map<Integer,File> workFilesMap = new HashMap<>();
 
     @Scheduled(fixedRateString = "${downloadperiod:3600000}") // every hour
-    public void checkAndGetFiasFiles() throws SOAPException {
+    public void checkAndGetFiasFiles() throws SOAPException, IOException {
 
         if (fiasFilesList != null){
             fiasFilesList.clear();
