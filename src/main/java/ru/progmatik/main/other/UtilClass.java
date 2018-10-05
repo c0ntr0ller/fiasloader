@@ -4,9 +4,12 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,9 +62,12 @@ public class UtilClass {
     public static String checkUrlFoRedirect(String url) throws IOException {
         URL hh= new URL(url);
         URLConnection connection = hh.openConnection();
-        String redirect = connection.getHeaderField("Location");
-        if (redirect != null){
-            url = redirect;
+        int code = ((HttpURLConnection)connection).getResponseCode();
+        if(code == HttpURLConnection.HTTP_MOVED_PERM || code == HttpURLConnection.HTTP_MOVED_TEMP) {
+            String redirect = connection.getHeaderField("Location");
+            if (redirect != null) {
+                url = redirect;
+            }
         }
         return url;
     }

@@ -27,6 +27,8 @@ client:
   ssl:
     trust-store: classpath:jks/nalog.ru.jks
     trust-store-password: nalog.ru-pass
+  readTimeoutMsec: 1000
+  connTimeoutMsec: 1000
 
 batch_size: 1000
 proceedperiod: 86400000

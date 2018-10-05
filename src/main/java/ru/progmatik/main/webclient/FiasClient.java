@@ -13,6 +13,9 @@ import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 import org.springframework.ws.soap.SoapMessage;
 import org.springframework.ws.soap.client.core.SoapActionCallback;
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
+import org.springframework.ws.transport.WebServiceMessageSender;
+import org.springframework.ws.transport.http.HttpComponentsMessageSender;
+import org.springframework.ws.transport.http.HttpUrlConnectionMessageSender;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPConstants;
@@ -20,6 +23,7 @@ import javax.xml.soap.SOAPException;
 import javax.xml.ws.handler.MessageContext;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +38,12 @@ public class FiasClient extends WebServiceGatewaySupport {
     @Value("${client.default-uri}")
     private String fiasurl;
 
+    @Value("${client.readTimeoutMsec:1000}")
+    private long readTimeoutMsec;
+
+    @Value("${client.connTimeoutMsec:1000}")
+    private int connTimeoutMsec;
+
     public List<DownloadFileInfo> getAllDownloadFileList() throws SOAPException, IOException {
 
 
@@ -46,6 +56,22 @@ public class FiasClient extends WebServiceGatewaySupport {
         SaajSoapMessageFactory saajSoapMessageFactory = new SaajSoapMessageFactory(msgFactory);
         WebServiceTemplate webServiceTemplate = getWebServiceTemplate();
         webServiceTemplate.setMessageFactory(saajSoapMessageFactory);
+
+        WebServiceMessageSender[] senders = webServiceTemplate.getMessageSenders();
+
+        for (WebServiceMessageSender sender: senders)
+        {
+            try
+            {
+                HttpUrlConnectionMessageSender httpSender = (HttpUrlConnectionMessageSender) sender;
+                httpSender.setReadTimeout(Duration.ofMillis(readTimeoutMsec));
+                httpSender.setConnectionTimeout(Duration.ofMillis(connTimeoutMsec));
+            }
+            catch (ClassCastException|NumberFormatException cex)
+            {
+                logger.warn("Cannot set WS timeout: " + cex.getMessage());
+            }
+        }
 
         String realURL = checkUrlFoRedirect(fiasurl);
 
