@@ -102,7 +102,7 @@ public class XMLFileReader implements AutoCloseable {
      * @throws XMLStreamException
      * @throws JAXBException
      */
-    public List<House> readHousesFromStream(int arraySize) throws XMLStreamException, JAXBException {
+    public List<House> readHousesFromStream(int arraySize, final String logFIAS) throws XMLStreamException, JAXBException {
 
         if(xmlStreamReader == null || !xmlStreamReader.hasNext()){
             return null;
@@ -126,13 +126,19 @@ public class XMLFileReader implements AutoCloseable {
                         xmlStreamReader.getLocalName().equalsIgnoreCase("House")) {
                     // создаем объект тип LocalNode
                     house = (House) jaxbUnmarshaller.unmarshal(xmlStreamReader);
-                    if(house.getSTRSTATUS().equals(zeroBigInt)) {
-                        // добавляем в лист ноду
-                        houseList.add(house);
-                        // инкрементируем счетчик
-                        count++;
+                    count++;
+                    if(logFIAS == null || logFIAS.isEmpty()) {
+                        if (house.getSTRSTATUS().equals(zeroBigInt)) {
+                            // добавляем в лист ноду
+                            houseList.add(house);
+                        }
                     }
-                    if(count%arraySize == 0){
+                    else{
+                        if(house.getHOUSEGUID().equalsIgnoreCase(logFIAS))
+                            houseList.add(house);
+                    }
+
+                    if (count % arraySize == 0) {
                         return houseList;
                     }
                 }
@@ -166,5 +172,9 @@ public class XMLFileReader implements AutoCloseable {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public List<House> readHousesFromStream(int batch_size) throws JAXBException, XMLStreamException {
+        return readHousesFromStream(batch_size, null);
     }
 }
