@@ -97,7 +97,7 @@ dependencies {
 
 bootJar {
     baseName = 'fiasloader'
-    version =  '0.1.666'
+    version =  '0.2.1'
 
     from genJaxb.classesDir
 }

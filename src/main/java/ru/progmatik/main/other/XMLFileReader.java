@@ -68,11 +68,12 @@ public class XMLFileReader implements AutoCloseable {
         // если в ридере еще есть что читать
         while (xmlStreamReader.hasNext()) {
             try {
-                // читаем следующий
-                xmlStreamReader.next();
                 // если элемент стартовый и его имя node
-                if (xmlStreamReader.isStartElement() &&
-                        xmlStreamReader.getLocalName().equalsIgnoreCase("Object")) {
+                if (!(xmlStreamReader.isStartElement() &&
+                        xmlStreamReader.getLocalName().equalsIgnoreCase("Object"))) {
+                    // читаем следующий
+                    xmlStreamReader.next();
+                }else{
                     // создаем объект тип LocalNode
                     addrObj = (Object) jaxbUnmarshaller.unmarshal(xmlStreamReader);
                     // добавляем в лист ноду
@@ -119,11 +120,12 @@ public class XMLFileReader implements AutoCloseable {
         // если в ридере еще есть что читать
         while (xmlStreamReader.hasNext()) {
             try {
-                // читаем следующий
-                xmlStreamReader.next();
                 // если элемент стартовый и его имя node
-                if (xmlStreamReader.isStartElement() &&
-                        xmlStreamReader.getLocalName().equalsIgnoreCase("House")) {
+                if (!(xmlStreamReader.isStartElement() &&
+                        xmlStreamReader.getLocalName().equalsIgnoreCase("House"))) {
+                    // читаем следующий
+                    xmlStreamReader.next();
+                }else{
                     // создаем объект тип LocalNode
                     house = (House) jaxbUnmarshaller.unmarshal(xmlStreamReader);
                     count++;
