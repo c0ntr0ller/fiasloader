@@ -53,7 +53,7 @@ public class AddrObjDAOBatchInsert {
                 statement.setString(14, addrobj.getSHORTNAME());
                 statement.setString(15, addrobj.getSTREETCODE());
                 statement.setBigDecimal(16, new BigDecimal(addrobj.getLIVESTATUS()));
-                statement.setBigDecimal(17, new BigDecimal(addrobj.getPLAINCODE()));
+                statement.setString(17, addrobj.getPLAINCODE());
                 statement.addBatch();
 
                 count++;
