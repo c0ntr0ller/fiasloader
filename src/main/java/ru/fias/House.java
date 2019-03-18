@@ -10,9 +10,9 @@ import java.math.BigInteger;
 //@Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
 public class House {
 
-//    @XmlAttribute(name = "POSTALCODE")
-//    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-//    protected String postalcode;
+    @XmlAttribute(name = "POSTALCODE")
+    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
+    protected String postalcode;
 //    @XmlAttribute(name = "REGIONCODE")
 //    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
 //    protected String regioncode;
@@ -86,31 +86,31 @@ public class House {
 //    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
 //    protected int divtype;
 
-//    /**
-//     * Gets the value of the postalcode property.
-//     *
-//     * @return
-//     *     possible object is
-//     *     {@link String }
-//     *
-//     */
-//    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-//    public String getPOSTALCODE() {
-//        return postalcode;
-//    }
-//
-//    /**
-//     * Sets the value of the postalcode property.
-//     *
-//     * @param value
-//     *     allowed object is
-//     *     {@link String }
-//     *
-//     */
-//    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-//    public void setPOSTALCODE(String value) {
-//        this.postalcode = value;
-//    }
+    /**
+     * Gets the value of the postalcode property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
+    public String getPOSTALCODE() {
+        return postalcode;
+    }
+
+    /**
+     * Sets the value of the postalcode property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
+    public void setPOSTALCODE(String value) {
+        this.postalcode = value;
+    }
 //
 //    /**
 //     * Gets the value of the regioncode property.

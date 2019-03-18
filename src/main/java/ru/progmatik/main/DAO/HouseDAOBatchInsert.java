@@ -20,7 +20,7 @@ public class HouseDAOBatchInsert {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    @Value("${house_query:\"update or insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus) values(?, ?, ?, ?, ?, ?)matching(houseid)\"}")
+    @Value("${house_query:\"update or insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus, postalcode) values(?, ?, ?, ?, ?, ?, ?)matching(houseid)\"}")
     private String house_query;
 
     @Value("${batchsize:1000}")
@@ -42,6 +42,7 @@ public class HouseDAOBatchInsert {
                 statement.setString(4, house.getHOUSEGUID());
                 statement.setString(5, house.getHOUSENUM());
                 statement.setBigDecimal(6, new BigDecimal(house.getSTRSTATUS()));
+                statement.setString(7, house.getPOSTALCODE());
 
                 statement.addBatch();
 
