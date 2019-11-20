@@ -128,7 +128,7 @@ public class Object {
     @XmlAttribute(name = "LIVESTATUS", required = true)
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:29+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected byte livestatus;
-    @XmlAttribute(name = "DIVTYPE", required = true)
+    @XmlAttribute(name = "DIVTYPE")
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:29+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected int divtype;
 

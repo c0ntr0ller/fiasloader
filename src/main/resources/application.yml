@@ -22,8 +22,8 @@
 #password: masterkey
 #encoding: WIN1251
 
-#driver: org.postgresql.Driver
-#databaseurl: jdbc:postgresql://172.16.0.203/fias?user=postgres&password=masterkey
+driver: org.postgresql.Driver
+databaseurl: jdbc:postgresql://172.16.0.203/fias?user=postgres&password=masterkey
 
 client:
   default-uri: http://fias.nalog.ru/WebServices/Public/DownloadService.asmx
@@ -36,10 +36,10 @@ client:
 batch_size: 100000
 proceedperiod: 86400000
 downloadperiod: 3600000
-house_query: update or insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus) values(?, ?, ?, ?, ?, ?)matching(houseid)
-addrobj_query: update or insert into addrobj(aoguid,aoid,aolevel,citycode,currstatus,formalname,nextid,offname,operstatus,parentguid,placecode,previd,regioncode,shortname,streetcode,livestatus)values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) matching(aoid)
-#house_query: INSERT INTO public.house0(houseid, aoguid, buildnum, houseguid, housenum, strstatus) VALUES (?::uuid, ?::uuid, ?, ?::uuid, ?, ?::integer) on conflict(houseid) do  UPDATE SET  aoguid = EXCLUDED.aoguid, buildnum = EXCLUDED.buildnum, houseguid = EXCLUDED.houseguid, housenum = EXCLUDED.housenum, strstatus = EXCLUDED.strstatus
-#addrobj_query: INSERT INTO public.addrobj(aoguid,aoid,aolevel,citycode,currstatus,formalname,nextid,offname,operstatus,parentguid,placecode,previd,regioncode,shortname,streetcode,livestatus) VALUES (?::uuid,?::uuid,?::integer,?,?::integer,?,?::uuid,?,?::integer,?::uuid,?,?::uuid,?,?,?,?::integer) on conflict (aoid) do update set aoguid = EXCLUDED.aoguid, aolevel = EXCLUDED.aolevel, citycode = EXCLUDED.citycode, currstatus = EXCLUDED.currstatus, formalname = EXCLUDED.formalname, nextid = EXCLUDED.nextid, offname = EXCLUDED.offname, operstatus = EXCLUDED.operstatus, parentguid = EXCLUDED.parentguid, placecode = EXCLUDED.placecode, previd = EXCLUDED.previd, regioncode = EXCLUDED.regioncode, shortname = EXCLUDED.shortname, streetcode = EXCLUDED.streetcode, livestatus = EXCLUDED.livestatus
+#house_query: update or insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus) values(?, ?, ?, ?, ?, ?)matching(houseid)
+#addrobj_query: update or insert into addrobj(aoguid,aoid,aolevel,citycode,currstatus,formalname,nextid,offname,operstatus,parentguid,placecode,previd,regioncode,shortname,streetcode,livestatus)values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) matching(aoid)
+house_query: INSERT INTO public.house0(houseid, aoguid, buildnum, houseguid, housenum, strstatus,postalcode) VALUES (?::uuid, ?::uuid, ?, ?::uuid, ?, ?::integer,?) on conflict(houseguid) do  UPDATE SET  aoguid = EXCLUDED.aoguid, buildnum = EXCLUDED.buildnum, houseguid = EXCLUDED.houseguid, housenum = EXCLUDED.housenum, strstatus = EXCLUDED.strstatus;
+addrobj_query: INSERT INTO public.addrobj(aoguid,aoid,aolevel,citycode,currstatus,formalname,nextid,offname,operstatus,parentguid,placecode,previd,regioncode,shortname,streetcode,livestatus,plaincode,divtype) VALUES (?::uuid,?::uuid,?::integer,?,?::integer,?,?::uuid,?,?::integer,?::uuid,?,?::uuid,?,?,?,?::integer,?,?::integer) on conflict (aoguid) do update set aoguid = EXCLUDED.aoguid, aolevel = EXCLUDED.aolevel, citycode = EXCLUDED.citycode, currstatus = EXCLUDED.currstatus, formalname = EXCLUDED.formalname, nextid = EXCLUDED.nextid, offname = EXCLUDED.offname, operstatus = EXCLUDED.operstatus, parentguid = EXCLUDED.parentguid, placecode = EXCLUDED.placecode, previd = EXCLUDED.previd, regioncode = EXCLUDED.regioncode, shortname = EXCLUDED.shortname, streetcode = EXCLUDED.streetcode, livestatus = EXCLUDED.livestatus;
 
 
 
