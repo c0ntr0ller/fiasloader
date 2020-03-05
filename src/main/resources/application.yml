@@ -26,7 +26,7 @@ driver: org.postgresql.Driver
 databaseurl: jdbc:postgresql://172.16.0.203/fias?user=postgres&password=masterkey
 
 client:
-  default-uri: http://fias.nalog.ru/WebServices/Public/DownloadService.asmx
+  default-uri: https://fias.nalog.ru/WebServices/Public/GetAllDownloadFileInfo
   ssl:
     trust-store: classpath:jks/nalog.ru.jks
     trust-store-password: nalog.ru-pass

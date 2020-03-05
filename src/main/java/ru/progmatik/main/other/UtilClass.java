@@ -46,7 +46,7 @@ public class UtilClass {
 
         if (canWrite) {
             copyURLToFile(
-                    new URL(checkUrlFoRedirect(url)),
+                    new URL(url),
                     new File(filename),
                     60*60*1000,
                     12*60*60*1000);

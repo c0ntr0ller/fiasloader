@@ -16,11 +16,15 @@ import ru.progmatik.main.DAO.HouseDAOBatchInsert;
 import ru.progmatik.main.other.XMLFileReader;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Objects;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * сервис предназначен для обработки скачанных файлов
@@ -38,14 +42,14 @@ public class ProceedFileController {
     @Value("${archDir:archive}")
     String archDir;
 
-    public void proceedFiasRarFile(final File fiasRarFile){
+    public void proceedFiasRarFile(final File fiasArchFile){
 
         try(Connection connection = dbService.getConnection()){
 
             boolean unpackSuccess = true;
 
-            if(fiasRarFile != null){
-                unpackSuccess = extractRarFile(fiasRarFile);
+            if(fiasArchFile != null){
+                unpackSuccess = extractArchFile(fiasArchFile);
             }
             if(unpackSuccess){
                 for (File sourceFile: Objects.requireNonNull(UNPACKFOLDER.listFiles())) {
@@ -62,8 +66,8 @@ public class ProceedFileController {
                 }
                 clearUnpackFolder();
             }
-            if(fiasRarFile != null){
-                fiasRarFile.renameTo(new File(archDir + File.separatorChar + fiasRarFile.getName()));
+            if(fiasArchFile != null){
+                fiasArchFile.renameTo(new File(archDir + File.separatorChar + fiasArchFile.getName()));
             }
         } catch (Exception e) {
             logger.error("proceedFiasRarFile error", e);
@@ -150,20 +154,34 @@ public class ProceedFileController {
         }
     }
 
-    private boolean extractRarFile(File fiasRarFile) throws IOException, RarException {
-        if(fiasRarFile == null) return false;
+    private boolean extractArchFile(File fiasArchFile) throws IOException, RarException {
+        if(fiasArchFile == null) return false;
 
-        if (!Files.exists(fiasRarFile.toPath())) {
-            throw new IOException(String.format("File not found: %s", fiasRarFile.toPath()));
+        if (!Files.exists(fiasArchFile.toPath())) {
+            throw new IOException(String.format("File not found: %s", fiasArchFile.toPath()));
         }
 
         prepareUnpackFolder();
 
-        logger.info("extract file" + fiasRarFile.toPath());
+        logger.info("extract file" + fiasArchFile.toPath());
 
-        Junrar.extract(fiasRarFile, UNPACKFOLDER);
+        byte[] buffer = new byte[1024];
+        ZipInputStream zis = new ZipInputStream(new FileInputStream(fiasArchFile));
+        ZipEntry zipEntry = zis.getNextEntry();
+        while (zipEntry != null) {
+            File newFile = new File(UNPACKFOLDER, zipEntry.getName());
+            FileOutputStream fos = new FileOutputStream(newFile);
+            int len;
+            while ((len = zis.read(buffer)) > 0) {
+                fos.write(buffer, 0, len);
+            }
+            fos.close();
+            zipEntry = zis.getNextEntry();
+        }
+        zis.closeEntry();
+        zis.close();
 
-        logger.info(fiasRarFile.toPath() + " extracted");
+        logger.info(fiasArchFile.toPath() + " extracted");
 
         return true;
     }

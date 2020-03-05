@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import ru.progmatik.main.pojo.DownloadFileInfoJson;
 import ru.progmatik.main.webclient.FiasClient;
 import ru.progmatik.main.other.UtilClass;
 
@@ -33,7 +34,7 @@ public class DownloadFilesSheduler {
     @Value("${workDir:work}")
     String workDir;
 
-    private List<DownloadFileInfo> fiasFilesList = new ArrayList<>();
+    private List<DownloadFileInfoJson> fiasFilesList = new ArrayList<>();
     private Map<Integer,File> archFilesMap = new HashMap<>();
     private Map<Integer,File> workFilesMap = new HashMap<>();
 
@@ -69,7 +70,7 @@ public class DownloadFilesSheduler {
                 tmpDir.mkdir();
             }
 
-            String tmpfilename =  "tmp" + File.separatorChar + versionId.toString() + ".rar";
+            String tmpfilename =  "tmp" + File.separatorChar + versionId.toString() + ".zip";
 
             try {
                 logger.info(String.format("Download file %s ...", tmpfilename));
@@ -106,22 +107,22 @@ public class DownloadFilesSheduler {
             archDir = "archive";
         }
 
-        archFilesMap = UtilClass.getDirFiles(archDir, "rar");
+        archFilesMap = UtilClass.getDirFiles(archDir, "zip");
 
         // получаем список файлов в папке для обработки (возможно какие-то еще не обработались либо скачаны частично)
         if(workDir == null || workDir.isEmpty()) {
             workDir = "work";
         }
-        workFilesMap = UtilClass.getDirFiles(workDir, "rar");
+        workFilesMap = UtilClass.getDirFiles(workDir, "zip");
 
         // определяем какие файлы надо скачать
 
         // если обе папки пусты - возвращем только имя последнего ПОЛНОГО архива
         if(archFilesMap.isEmpty() && workFilesMap.isEmpty()){
 
-            DownloadFileInfo totalArch  = fiasFilesList
+            DownloadFileInfoJson totalArch  = fiasFilesList
                     .stream()
-                    .max(Comparator.comparingInt(DownloadFileInfo::getVersionId)).get();
+                    .max(Comparator.comparingInt(DownloadFileInfoJson::getVersionId)).get();
             fileMapForDownload.put(totalArch.getVersionId(), totalArch.getFiasCompleteXmlUrl());
         }else {
             // Нам нужен максимальный номер скачанной версии
@@ -131,7 +132,7 @@ public class DownloadFilesSheduler {
             Integer maxVersion = workFilesMap.keySet().stream().max(Comparator.naturalOrder()).get();
 
             // все файлы с версией выше добавляем на скачивание
-            for (DownloadFileInfo downloadFileInfo : fiasFilesList) {
+            for (DownloadFileInfoJson downloadFileInfo : fiasFilesList) {
                 if(downloadFileInfo.getVersionId() > maxVersion){
                     // добавляем только ИНКРЕМЕНТЫ
                     fileMapForDownload.put(downloadFileInfo.getVersionId(), downloadFileInfo.getFiasDeltaXmlUrl());
