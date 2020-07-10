@@ -16,14 +16,16 @@
 #        username: postgres
 #        password: 222
 
-#driver: org.firebirdsql.jdbc.FBDriver
-#databaseurl: jdbc:firebirdsql:172.16.0.203:fias
-#user: SYSDBA
-#password: masterkey
-#encoding: WIN1251
+# FIREBIRD DB SETTINGS
+driver: org.firebirdsql.jdbc.FBDriver
+databaseurl: jdbc:firebirdsql:172.16.0.203:/opt/bases/fias_0.fdb
+user: SYSDBA
+password: masterkey
+encoding: WIN1251
 
-driver: org.postgresql.Driver
-databaseurl: jdbc:postgresql://172.16.0.203/fias?user=postgres&password=masterkey
+# POSTGRESQL DATABASE SETTINGS
+#driver: org.postgresql.Driver
+#databaseurl: jdbc:postgresql://localhost/fias?user=postgres&password=masterkey
 
 client:
   default-uri: https://fias.nalog.ru/WebServices/Public/GetAllDownloadFileInfo
@@ -33,17 +35,16 @@ client:
   readTimeoutMsec: 1000
   connTimeoutMsec: 1000
 
-batch_size: 100000
+batch_size: 1000
 proceedperiod: 86400000
-downloadperiod: 3600000
+downloadperiod: 86400000
 
-#house_query: insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus) values(?, ?, ?, ?, ?, ?)
-#addrobj_query: insert into addrobj(aoguid,aoid,aolevel,citycode,currstatus,formalname,nextid,offname,operstatus,parentguid,placecode,previd,regioncode,shortname,streetcode,livestatus, plaincode, div_type)values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-house_query: INSERT INTO public.house0(houseid, aoguid, buildnum, houseguid, housenum, strstatus,postalcode, statstatus, eststatus) VALUES (?::uuid, ?::uuid, ?, ?::uuid, ?, ?::integer,?, ?::integer, ?::integer) on conflict(houseguid) do  UPDATE SET  aoguid = EXCLUDED.aoguid, buildnum = EXCLUDED.buildnum, houseguid = EXCLUDED.houseguid, housenum = EXCLUDED.housenum, strstatus = EXCLUDED.strstatus, statstatus = EXCLUDED.statstatus, eststatus = EXCLUDED.eststatus;
-addrobj_query: INSERT INTO public.addrobj(aoguid,aoid,aolevel,citycode,currstatus,formalname,nextid,offname,operstatus,parentguid,placecode,previd,regioncode,shortname,streetcode,livestatus,plaincode,divtype) VALUES (?::uuid,?::uuid,?::integer,?,?::integer,?,?::uuid,?,?::integer,?::uuid,?,?::uuid,?,?,?,?::integer,?,?::integer) on conflict (aoguid) do update set aoguid = EXCLUDED.aoguid, aolevel = EXCLUDED.aolevel, citycode = EXCLUDED.citycode, currstatus = EXCLUDED.currstatus, formalname = EXCLUDED.formalname, nextid = EXCLUDED.nextid, offname = EXCLUDED.offname, operstatus = EXCLUDED.operstatus, parentguid = EXCLUDED.parentguid, placecode = EXCLUDED.placecode, previd = EXCLUDED.previd, regioncode = EXCLUDED.regioncode, shortname = EXCLUDED.shortname, streetcode = EXCLUDED.streetcode, livestatus = EXCLUDED.livestatus;
-
-
-
+#house_query: INSERT INTO public.house0(houseid, aoguid, buildnum, houseguid, housenum, strstatus) VALUES (?::uuid, ?::uuid, ?, ?::uuid, ?, ?::integer) on conflict(houseid) do  UPDATE SET  aoguid = EXCLUDED.aoguid, buildnum = EXCLUDED.buildnum, houseguid = EXCLUDED.houseguid, housenum = EXCLUDED.housenum, strstatus = EXCLUDED.strstatus;
+#addrobj_query: INSERT INTO public.addrobj(aoguid,aoid,aolevel,citycode,currstatus,formalname,nextid,offname,operstatus,parentguid,placecode,previd,regioncode,shortname,streetcode,livestatus) VALUES (?::uuid,?::uuid,?::integer,?,?::integer,?,?::uuid,?,?::integer,?::uuid,?,?::uuid,?,?,?,?::integer) on conflict (aoid) do update set aoguid = EXCLUDED.aoguid, aolevel = EXCLUDED.aolevel, citycode = EXCLUDED.citycode, currstatus = EXCLUDED.currstatus, formalname = EXCLUDED.formalname, nextid = EXCLUDED.nextid, offname = EXCLUDED.offname, operstatus = EXCLUDED.operstatus, parentguid = EXCLUDED.parentguid, placecode = EXCLUDED.placecode, previd = EXCLUDED.previd, regioncode = EXCLUDED.regioncode, shortname = EXCLUDED.shortname, streetcode = EXCLUDED.streetcode, livestatus = EXCLUDED.livestatus;
+#house_query: update or insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus, postalcode) values(?, ?, ?, ?, ?, ?, ?)matching(houseid)
+house_query: update or insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus, postalcode, statstatus, eststatus) values(?, ?, ?, ?, ?, ?, ?, ?, ?)
+#addrobj_query: update or insert into addrobj(aoguid,aoid,aolevel,citycode,currstatus,formalname,nextid,offname,operstatus,parentguid,placecode,previd,regioncode,shortname,streetcode,livestatus, plaincode, divtype)values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) matching(aoid)
+addrobj_query: insert into addrobj(aoguid,aoid,aolevel,citycode,currstatus,formalname,nextid,offname,operstatus,parentguid,placecode,previd,regioncode,shortname,streetcode,livestatus, plaincode, div_type)values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 logging:
   level:
     root: info

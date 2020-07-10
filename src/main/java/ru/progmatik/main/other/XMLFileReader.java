@@ -153,6 +153,9 @@ public class XMLFileReader implements AutoCloseable {
                     }
                 }
                 // если достигли установленного размера - возвращаем лист
+            } catch (NumberFormatException ne){
+                logger.error("Read house from XMLstream error NumberFormatException", ne);
+                xmlStreamReader.next();
             } catch (XMLStreamException e1) {
                 logger.error("Read house from XMLstream error", e1);
                 e1.printStackTrace();

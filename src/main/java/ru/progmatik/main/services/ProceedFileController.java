@@ -45,6 +45,7 @@ public class ProceedFileController {
 
         try(Connection connection = dbService.getConnection()){
 
+            logger.info(String.format("Proceed file %s", fiasArchFile.getName()));
             boolean unpackSuccess = true;
 
             if(fiasArchFile != null){
@@ -55,7 +56,7 @@ public class ProceedFileController {
                     if(!sourceFile.isDirectory()
                             && FilenameUtils.getExtension(sourceFile.getName()).equalsIgnoreCase("xml")) {
                         String filename = FilenameUtils.getName(sourceFile.getName());
-                        if(filename.contains("AS_ADDRESS_OBJECTS")){
+                        if(filename.contains("AS_ADDRESS_OBJECTS")|| filename.contains("AS_ADDROBJ")){
                             proceedAddrObj(sourceFile, connection);
                         }
                         if(filename.contains("AS_HOUSE")){
@@ -65,6 +66,11 @@ public class ProceedFileController {
                 }
                 clearUnpackFolder();
             }
+            else{
+                logger.info("Unpack unsuccess...");
+                logger.info(String.format("Unpack file %s unsuccess...", fiasArchFile.getName()));
+            }
+
             if(fiasArchFile != null){
                 fiasArchFile.renameTo(new File(archDir + File.separatorChar + fiasArchFile.getName()));
             }
@@ -168,13 +174,15 @@ public class ProceedFileController {
         ZipInputStream zis = new ZipInputStream(new FileInputStream(fiasArchFile));
         ZipEntry zipEntry = zis.getNextEntry();
         while (zipEntry != null) {
-            File newFile = new File(UNPACKFOLDER, zipEntry.getName());
-            FileOutputStream fos = new FileOutputStream(newFile);
-            int len;
-            while ((len = zis.read(buffer)) > 0) {
-                fos.write(buffer, 0, len);
+            if (!zipEntry.getName().contains("/")) {
+                File newFile = new File(UNPACKFOLDER, zipEntry.getName());
+                FileOutputStream fos = new FileOutputStream(newFile);
+                int len;
+                while ((len = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+                fos.close();
             }
-            fos.close();
             zipEntry = zis.getNextEntry();
         }
         zis.closeEntry();

@@ -10,6 +10,7 @@ import ru.progmatik.main.other.UtilClass;
 
 import java.io.File;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * сервис работает по расписанию. Обнаруживает файлы в рабочей папке и запускает их в обработку
@@ -38,7 +39,11 @@ public class ProceedFilesSheduler {
 
         logger.info(String.format("Files for proceed to database: %d", workFilesMap.size()));
         // обрабатываем их с переносом в архив
-        for (File file : workFilesMap.values()) {
+        for (Integer versionId : workFilesMap.keySet().stream().sorted().collect(Collectors.toList())) {
+            File file = workFilesMap.get(versionId);
+
+            logger.info(String.format("call proceedFiasArchFile for %s", file.getName()));
+
             proceedFileController.proceedFiasArchFile(file);
         }
     }
