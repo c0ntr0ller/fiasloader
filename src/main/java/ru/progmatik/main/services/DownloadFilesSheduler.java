@@ -38,7 +38,7 @@ public class DownloadFilesSheduler {
     private Map<Integer,File> archFilesMap = new HashMap<>();
     private Map<Integer,File> workFilesMap = new HashMap<>();
 
-    @Scheduled(fixedRateString = "${downloadperiod:3600000}") // every hour
+    @Scheduled(fixedRateString = "${downloadperiod:360000000}") // every 100 hour
     public void checkAndGetFiasFiles() throws SOAPException, IOException {
 
         if (fiasFilesList != null){
@@ -124,6 +124,7 @@ public class DownloadFilesSheduler {
                     .stream()
                     .max(Comparator.comparingInt(DownloadFileInfoJson::getVersionId)).get();
             fileMapForDownload.put(totalArch.getVersionId(), totalArch.getFiasCompleteXmlUrl());
+            logger.info("Arch and Work empty, downloading full file");
         }else {
             // Нам нужен максимальный номер скачанной версии
             // объединяем все списки файлов в один
@@ -138,6 +139,7 @@ public class DownloadFilesSheduler {
                     fileMapForDownload.put(downloadFileInfo.getVersionId(), downloadFileInfo.getFiasDeltaXmlUrl());
                 }
             }
+            logger.info("Files for download: " + fileMapForDownload.size());
         }
         return fileMapForDownload;
     }

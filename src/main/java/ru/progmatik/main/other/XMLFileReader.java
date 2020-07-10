@@ -7,6 +7,7 @@ import ru.fias.House;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -86,8 +87,12 @@ public class XMLFileReader implements AutoCloseable {
                 }
                 // если достигли установленного размера - возвращаем лист
             } catch (XMLStreamException e1) {
-                logger.error("Read addrObj from XMLstream error", e1);
+                logger.error("Read addrObj from XMLstream error XMLStreamException", e1);
                 e1.printStackTrace();
+            } catch (NumberFormatException ne){
+                logger.error("Read addrObj from XMLstream error NumberFormatException", ne);
+//                ne.printStackTrace();
+                xmlStreamReader.next();
             }
         }
         // закрываем ридер, если больше нечего читать
@@ -130,13 +135,16 @@ public class XMLFileReader implements AutoCloseable {
                     house = (House) jaxbUnmarshaller.unmarshal(xmlStreamReader);
                     count++;
                     if(logFIAS == null || logFIAS.isEmpty()) {
+                        if (house.getSTRSTATUS() == null){
+                            house.setSTRSTATUS(zeroBigInt);
+                        }
                         if (house.getSTRSTATUS().equals(zeroBigInt)) {
                             // добавляем в лист ноду
                             houseList.add(house);
                         }
                     }
                     else{
-                        if(house.getHOUSEGUID().equalsIgnoreCase(logFIAS))
+                        if(house.getHOUSEGUID().toString().equalsIgnoreCase(logFIAS))
                             houseList.add(house);
                     }
 
@@ -148,6 +156,9 @@ public class XMLFileReader implements AutoCloseable {
             } catch (XMLStreamException e1) {
                 logger.error("Read house from XMLstream error", e1);
                 e1.printStackTrace();
+            } catch (UnmarshalException e2) {
+                logger.error("Unmarshal house from XMLstream error", e2);
+                e2.printStackTrace();
             }
         }
         // закрываем ридер, если больше нечего читать

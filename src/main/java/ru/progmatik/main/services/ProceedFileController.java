@@ -1,6 +1,5 @@
 package ru.progmatik.main.services;
 
-import com.github.junrar.Junrar;
 import com.github.junrar.exception.RarException;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -42,7 +41,7 @@ public class ProceedFileController {
     @Value("${archDir:archive}")
     String archDir;
 
-    public void proceedFiasRarFile(final File fiasArchFile){
+    public void proceedFiasArchFile(final File fiasArchFile){
 
         try(Connection connection = dbService.getConnection()){
 
@@ -56,7 +55,7 @@ public class ProceedFileController {
                     if(!sourceFile.isDirectory()
                             && FilenameUtils.getExtension(sourceFile.getName()).equalsIgnoreCase("xml")) {
                         String filename = FilenameUtils.getName(sourceFile.getName());
-                        if(filename.contains("AS_ADDROBJ")){
+                        if(filename.contains("AS_ADDRESS_OBJECTS")){
                             proceedAddrObj(sourceFile, connection);
                         }
                         if(filename.contains("AS_HOUSE")){
@@ -70,7 +69,7 @@ public class ProceedFileController {
                 fiasArchFile.renameTo(new File(archDir + File.separatorChar + fiasArchFile.getName()));
             }
         } catch (Exception e) {
-            logger.error("proceedFiasRarFile error", e);
+            logger.error("proceedFiasArchFile error", e);
             e.printStackTrace();
         }
     }

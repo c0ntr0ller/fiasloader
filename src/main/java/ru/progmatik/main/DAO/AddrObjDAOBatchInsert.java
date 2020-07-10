@@ -20,7 +20,7 @@ import java.util.List;
 public class AddrObjDAOBatchInsert {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Value("${addrobj_query:\"update or insert into addrobj(aoguid,aoid,aolevel,citycode,currstatus,formalname,nextid,offname,operstatus,parentguid,placecode,previd,regioncode,shortname,streetcode,livestatus, plaincode, divtype)values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) matching(aoid)\"}")
+    @Value("${addrobj_query:\"update or insert into addrobj(aoguid,aoid,aolevel,citycode,currstatus,formalname,nextid,offname,operstatus,parentguid,placecode,previd,regioncode,shortname,streetcode,livestatus, plaincode, div_type)values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) matching(aoid)\"}")
     private String addrobj_query;
 
     @Value("${batchsize:1000}")
@@ -36,7 +36,6 @@ public class AddrObjDAOBatchInsert {
             connection.setAutoCommit(false);
 
             for (Object addrobj:objectList) {
-
                 statement.setString(1, addrobj.getAOGUID());
                 statement.setString(2, addrobj.getAOID());
                 statement.setBigDecimal(3, new BigDecimal(addrobj.getAOLEVEL()));

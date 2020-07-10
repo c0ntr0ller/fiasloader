@@ -34,12 +34,12 @@ public class ProceedFilesSheduler {
         if(workDir == null || workDir.isEmpty()) {
             workDir = "work";
         }
-        Map<Integer,File> workFilesMap = UtilClass.getDirFiles(workDir, "rar");
+        Map<Integer,File> workFilesMap = UtilClass.getDirFiles(workDir, "zip");
 
         logger.info(String.format("Files for proceed to database: %d", workFilesMap.size()));
         // обрабатываем их с переносом в архив
         for (File file : workFilesMap.values()) {
-            proceedFileController.proceedFiasRarFile(file);
+            proceedFileController.proceedFiasArchFile(file);
         }
     }
 }

@@ -4,6 +4,7 @@ import javax.annotation.Generated;
 import javax.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigInteger;
+import java.util.UUID;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "House")
@@ -41,9 +42,9 @@ public class House {
     @XmlAttribute(name = "HOUSENUM")
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected String housenum;
-//    @XmlAttribute(name = "ESTSTATUS", required = true)
-//    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-//    protected BigInteger eststatus;
+    @XmlAttribute(name = "ESTSTATUS", required = true)
+    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
+    protected BigInteger eststatus;
     @XmlAttribute(name = "BUILDNUM")
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected String buildnum;
@@ -58,10 +59,10 @@ public class House {
     protected String houseid;
     @XmlAttribute(name = "HOUSEGUID", required = true)
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-    protected String houseguid;
+    protected UUID houseguid;
     @XmlAttribute(name = "AOGUID", required = true)
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-    protected String aoguid;
+    protected UUID aoguid;
 //    @XmlAttribute(name = "STARTDATE", required = true)
 //    @XmlSchemaType(name = "date")
 //    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
@@ -70,9 +71,9 @@ public class House {
 //    @XmlSchemaType(name = "date")
 //    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
 //    protected XMLGregorianCalendar enddate;
-//    @XmlAttribute(name = "STATSTATUS", required = true)
-//    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-//    protected BigInteger statstatus;
+    @XmlAttribute(name = "STATSTATUS", required = true)
+    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
+    protected BigInteger statstatus;
 //    @XmlAttribute(name = "NORMDOC")
 //    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
 //    protected String normdoc;
@@ -354,23 +355,23 @@ public class House {
      *     {@link BigInteger }
      *
      */
-//    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-//    public BigInteger getESTSTATUS() {
-//        return eststatus;
-//    }
-//
-//    /**
-//     * Sets the value of the eststatus property.
-//     *
-//     * @param value
-//     *     allowed object is
-//     *     {@link BigInteger }
-//     *
-//     */
-//    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-//    public void setESTSTATUS(BigInteger value) {
-//        this.eststatus = value;
-//    }
+    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
+    public BigInteger getESTSTATUS() {
+        return eststatus;
+    }
+
+    /**
+     * Sets the value of the eststatus property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link BigInteger }
+     *
+     */
+    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
+    public void setESTSTATUS(BigInteger value) {
+        this.eststatus = value;
+    }
 
     /**
      * Gets the value of the buildnum property.
@@ -447,6 +448,7 @@ public class House {
      */
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
     public void setSTRSTATUS(BigInteger value) {
+        if (value == null) {value = BigInteger.valueOf(0);};
         this.strstatus = value;
     }
 
@@ -481,11 +483,11 @@ public class House {
      *
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link UUID }
      *
      */
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-    public String getHOUSEGUID() {
+    public UUID getHOUSEGUID() {
         return houseguid;
     }
 
@@ -494,11 +496,11 @@ public class House {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link UUID }
      *
      */
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-    public void setHOUSEGUID(String value) {
+    public void setHOUSEGUID(UUID value) {
         this.houseguid = value;
     }
 
@@ -507,11 +509,11 @@ public class House {
      *
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link UUID }
      *
      */
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-    public String getAOGUID() {
+    public UUID getAOGUID() {
         return aoguid;
     }
 
@@ -520,11 +522,11 @@ public class House {
      *
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link UUID }
      *
      */
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-    public void setAOGUID(String value) {
+    public void setAOGUID(UUID value) {
         this.aoguid = value;
     }
 
@@ -580,31 +582,31 @@ public class House {
 //        this.enddate = value;
 //    }
 //
-//    /**
-//     * Gets the value of the statstatus property.
-//     *
-//     * @return
-//     *     possible object is
-//     *     {@link BigInteger }
-//     *
-//     */
-//    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-//    public BigInteger getSTATSTATUS() {
-//        return statstatus;
-//    }
-//
-//    /**
-//     * Sets the value of the statstatus property.
-//     *
-//     * @param value
-//     *     allowed object is
-//     *     {@link BigInteger }
-//     *
-//     */
-//    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
-//    public void setSTATSTATUS(BigInteger value) {
-//        this.statstatus = value;
-//    }
+    /**
+     * Gets the value of the statstatus property.
+     *
+     * @return
+     *     possible object is
+     *     {@link BigInteger }
+     *
+     */
+    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
+    public BigInteger getSTATSTATUS() {
+        return statstatus;
+    }
+
+    /**
+     * Sets the value of the statstatus property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link BigInteger }
+     *
+     */
+    @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:56+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
+    public void setSTATSTATUS(BigInteger value) {
+        this.statstatus = value;
+    }
 //
 //    /**
 //     * Gets the value of the normdoc property.

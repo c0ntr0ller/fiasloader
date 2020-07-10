@@ -20,7 +20,7 @@ public class HouseDAOBatchInsert {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    @Value("${house_query:\"update or insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus, postalcode) values(?, ?, ?, ?, ?, ?, ?)matching(houseid)\"}")
+    @Value("${house_query:\"update or insert into house0 (houseid, aoguid, buildnum, houseguid, housenum, strstatus, postalcode, statstatus, eststatus) values(?, ?, ?, ?, ?, ?, ?, ?, ?)matching(houseid)\"}")
     private String house_query;
 
     @Value("${batchsize:1000}")
@@ -36,16 +36,19 @@ public class HouseDAOBatchInsert {
             connection.setAutoCommit(false);
 
             for (House house:houseList) {
-                statement.setString(1, house.getHOUSEID());
-                statement.setString(2, house.getAOGUID());
-                statement.setString(3, house.getBUILDNUM());
-                statement.setString(4, house.getHOUSEGUID());
-                statement.setString(5, house.getHOUSENUM());
-                statement.setBigDecimal(6, new BigDecimal(house.getSTRSTATUS()));
-                statement.setString(7, house.getPOSTALCODE());
+                if (house.getAOGUID() != null && house.getHOUSEGUID() != null) {
+                    statement.setString(1, house.getHOUSEID());
+                    statement.setString(2, house.getAOGUID().toString());
+                    statement.setString(3, house.getBUILDNUM());
+                    statement.setString(4, house.getHOUSEGUID().toString());
+                    statement.setString(5, house.getHOUSENUM());
+                    statement.setBigDecimal(6, new BigDecimal(house.getSTRSTATUS()));
+                    statement.setString(7, house.getPOSTALCODE());
+                    statement.setBigDecimal(8, new BigDecimal(house.getSTATSTATUS()));
+                    statement.setBigDecimal(9, new BigDecimal(house.getESTSTATUS()));
 
-                statement.addBatch();
-
+                    statement.addBatch();
+                }
                 count++;
 
                 if (count%BATCH_SIZE == 0) {
