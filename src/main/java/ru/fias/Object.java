@@ -102,30 +102,30 @@ public class Object {
     @XmlAttribute(name = "PLAINCODE")
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:29+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected String plaincode;
-    @XmlAttribute(name = "ACTSTATUS", required = true)
+    @XmlAttribute(name = "ACTSTATUS")
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:29+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected BigInteger actstatus;
-    @XmlAttribute(name = "CENTSTATUS", required = true)
+    @XmlAttribute(name = "CENTSTATUS")
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:29+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected BigInteger centstatus;
-    @XmlAttribute(name = "OPERSTATUS", required = true)
+    @XmlAttribute(name = "OPERSTATUS")
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:29+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected BigInteger operstatus;
-    @XmlAttribute(name = "CURRSTATUS", required = true)
+    @XmlAttribute(name = "CURRSTATUS")
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:29+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected BigInteger currstatus;
-    @XmlAttribute(name = "STARTDATE", required = true)
+    @XmlAttribute(name = "STARTDATE")
     @XmlSchemaType(name = "date")
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:29+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected XMLGregorianCalendar startdate;
-    @XmlAttribute(name = "ENDDATE", required = true)
+    @XmlAttribute(name = "ENDDATE")
     @XmlSchemaType(name = "date")
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:29+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected XMLGregorianCalendar enddate;
     @XmlAttribute(name = "NORMDOC")
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:29+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected String normdoc;
-    @XmlAttribute(name = "LIVESTATUS", required = true)
+    @XmlAttribute(name = "LIVESTATUS")
     @Generated(value = "com.sun.tools.internal.xjc.Driver", date = "2018-08-13T02:29:29+07:00", comments = "JAXB RI v2.2.8-b130911.1802")
     protected byte livestatus;
     @XmlAttribute(name = "DIVTYPE")
